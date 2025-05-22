@@ -1,7 +1,5 @@
 package com.uor.dev.entity;
 
-import com.uor.dev.entity.Course;
-import com.uor.dev.entity.Student;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
