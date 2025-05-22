@@ -9,15 +9,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "students")
+@Table(name = "lecturers")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Student {
+public class Lecturer {
 
   @Id
-  @Column(name = "student_id")
-  private Integer studentId;
+  @Column(name = "lecturer_id")
+  private Integer lecturerId;
 
   @Column(name = "first_name", nullable = false)
   private String firstName;
@@ -37,9 +37,13 @@ public class Student {
   @Column(name = "date_of_birth")
   private LocalDate dateOfBirth;
 
-  @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private List<Enrollment> enrollments;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "department_id", nullable = false)
+  private Department department;
 
-  @ManyToMany(mappedBy = "students")
+  @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Session> sessions;
+
+  @ManyToMany(mappedBy = "lecturers")
+  private List<Course> courses;
 }

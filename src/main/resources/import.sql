@@ -68,3 +68,32 @@ CREATE TABLE IF NOT EXISTS sessions
     FOREIGN KEY (course_id) REFERENCES courses (course_id),
     FOREIGN KEY (lecturer_id) REFERENCES lecturers (lecturer_id)
 );
+
+-- create attendance table
+CREATE TABLE IF NOT EXISTS attendance
+(
+    session_id    INT  NOT NULL,
+    student_id    INT  NOT NULL,
+    FOREIGN KEY (session_id) REFERENCES sessions (session_id),
+    FOREIGN KEY (student_id) REFERENCES students (student_id),
+    PRIMARY KEY (session_id, student_id)
+);
+
+-- create teaches table
+CREATE TABLE IF NOT EXISTS teaches
+(
+    lecturer_id INT  NOT NULL,
+    course_id   INT  NOT NULL,
+    FOREIGN KEY (lecturer_id) REFERENCES lecturers (lecturer_id),
+    FOREIGN KEY (course_id) REFERENCES courses (course_id),
+    PRIMARY KEY (lecturer_id, course_id)
+);
+
+-- add indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_students_email ON students (email);
+CREATE INDEX IF NOT EXISTS idx_courses_course_code ON courses (course_code);
+CREATE INDEX IF NOT EXISTS idx_lecturers_email ON lecturers (email);
+CREATE INDEX IF NOT EXISTS idx_enrollments_student_id ON enrollments (student_id);
+CREATE INDEX IF NOT EXISTS idx_enrollments_course_id ON enrollments (course_id);
+
+
