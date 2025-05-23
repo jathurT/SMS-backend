@@ -1,9 +1,12 @@
 package com.uor.dev.controller;
 
 import com.uor.dev.entity.Lecturer;
+import com.uor.dev.payload.lecturer.CreateLecturerRequestDTO;
+import com.uor.dev.payload.lecturer.UpdateLecturerRequestDTO;
 import com.uor.dev.service.LectureService;
 import com.uor.dev.util.ResponseEntity;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
@@ -32,11 +35,29 @@ public class LecturerController {
     return lecturer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Lecturer not found"));
   }
 
-//  @POST
-//  @Path("/add")
-//  public ResponseEntity<Lecturer> addLecturer(Lecturer lecturer) {
-//    Lecturer createdLecturer = lectureService.addLecturer(lecturer);
-//    return ResponseEntity.created(createdLecturer);
-//  }
+  @POST
+  @Path("/add")
+  public ResponseEntity<Lecturer> addLecturer(@Valid CreateLecturerRequestDTO lecturer) {
+    Lecturer createdLecturer = lectureService.addLecturer(lecturer);
+    return ResponseEntity.created(createdLecturer);
+  }
+
+  @PUT
+  @Path("/update/{id}")
+  public ResponseEntity<Lecturer> updateLecturer(@PathParam("id") int id, @Valid UpdateLecturerRequestDTO lecturer) {
+    Optional<Lecturer> updatedLecturer = lectureService.updateLecturer(id, lecturer);
+    return updatedLecturer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Lecturer not found"));
+  }
+
+  @DELETE
+  @Path("/delete/{id}")
+  public ResponseEntity<Void> deleteLecturer(@PathParam("id") int id) {
+    boolean deleted = lectureService.deleteLecturer(id);
+    if (deleted) {
+      return ResponseEntity.noContent();
+    } else {
+      return ResponseEntity.notFound("Lecturer not found");
+    }
+  }
 
 }
