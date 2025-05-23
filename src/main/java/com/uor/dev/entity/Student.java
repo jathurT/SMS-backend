@@ -9,13 +9,17 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "students")
+@Table(name = "students",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+    })
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Student {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "student_id")
   private Integer studentId;
 

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "attendance")
+@IdClass(Attendance.class)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
