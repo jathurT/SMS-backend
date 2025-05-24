@@ -2,15 +2,17 @@ package com.uor.dev.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "attendance")
-@IdClass(Attendance.class)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+//@IdClass(AttendanceId.class)
 public class Attendance {
 
   @Id

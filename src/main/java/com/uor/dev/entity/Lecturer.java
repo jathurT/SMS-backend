@@ -1,7 +1,9 @@
 package com.uor.dev.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,10 +15,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Lecturer {
 
   @Id
   @Column(name = "lecturer_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer lecturerId;
 
   @Column(name = "first_name", nullable = false)

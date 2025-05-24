@@ -1,8 +1,8 @@
 package com.uor.dev.controller;
 
 
-import com.uor.dev.entity.Student;
 import com.uor.dev.payload.student.CreateStudentRequestDTO;
+import com.uor.dev.payload.student.StudentResponseDTO;
 import com.uor.dev.payload.student.UpdateStudentRequestDTO;
 import com.uor.dev.service.StudentService;
 import com.uor.dev.util.ResponseEntity;
@@ -24,29 +24,29 @@ public class StudentController {
 
   @GET
   @Path("/all")
-  public ResponseEntity<List<Student>> getAllStudents() {
-    List<Student> students = studentService.getAllStudents();
+  public ResponseEntity<List<StudentResponseDTO>> getAllStudents() {
+    List<StudentResponseDTO> students = studentService.getAllStudents();
     return ResponseEntity.ok(students);
   }
 
   @GET
   @Path("/{id}")
-  public ResponseEntity<Student> getStudentById(@PathParam("id") int id) {
-    Optional<Student> student = studentService.getStudentById(id);
+  public ResponseEntity<StudentResponseDTO> getStudentById(@PathParam("id") int id) {
+    Optional<StudentResponseDTO> student = studentService.getStudentById(id);
     return student.map(ResponseEntity::ok).orElse(ResponseEntity.notFound("Student not found"));
   }
 
   @POST
   @Path("/add")
-  public ResponseEntity<Student> addStudent(@Valid CreateStudentRequestDTO student) {
-    Student createdStudent = studentService.addStudent(student);
+  public ResponseEntity<StudentResponseDTO> addStudent(@Valid CreateStudentRequestDTO student) {
+    StudentResponseDTO createdStudent = studentService.addStudent(student);
     return ResponseEntity.created(createdStudent);
   }
 
   @PUT
   @Path("/update/{id}")
-  public ResponseEntity<Student> updateStudent(@PathParam("id") int id, @Valid UpdateStudentRequestDTO student) {
-    Optional<Student> updatedStudent = studentService.updateStudent(id, student);
+  public ResponseEntity<StudentResponseDTO> updateStudent(@PathParam("id") int id, @Valid UpdateStudentRequestDTO student) {
+    Optional<StudentResponseDTO> updatedStudent = studentService.updateStudent(id, student);
     return updatedStudent.map(ResponseEntity::ok).orElse(ResponseEntity.notFound("Student not found"));
   }
 
@@ -63,8 +63,8 @@ public class StudentController {
 
   @GET
   @Path("/email/{email}")
-  public ResponseEntity<Student> getStudentByEmail(@PathParam("email") String email) {
-    Optional<Student> student = studentService.getStudentByEmail(email);
+  public ResponseEntity<StudentResponseDTO> getStudentByEmail(@PathParam("email") String email) {
+    Optional<StudentResponseDTO> student = studentService.getStudentByEmail(email);
     return student.map(ResponseEntity::ok).orElse(ResponseEntity.notFound("Student not found"));
   }
 }

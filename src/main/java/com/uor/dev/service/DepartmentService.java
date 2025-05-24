@@ -1,19 +1,19 @@
 package com.uor.dev.service;
 
-import com.uor.dev.entity.Department;
 import com.uor.dev.payload.department.CreateDepartmentRequestDTO;
+import com.uor.dev.payload.department.DepartmentResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface DepartmentService {
-  List<Department> getAllDepartments();
+  List<DepartmentResponseDTO> getAllDepartments();
 
-  Optional<Department> getDepartmentById(int id);
+  Optional<DepartmentResponseDTO> getDepartmentById(int id);
 
-  Department addDepartment(CreateDepartmentRequestDTO department);
+  DepartmentResponseDTO addDepartment(CreateDepartmentRequestDTO department);
 
-  Optional<Department> updateDepartment(int id, CreateDepartmentRequestDTO department);
+  Optional<DepartmentResponseDTO> updateDepartment(int id, CreateDepartmentRequestDTO department);
 
   boolean deleteDepartment(int id);
 }

@@ -1,7 +1,7 @@
 package com.uor.dev.controller;
 
-import com.uor.dev.entity.Department;
 import com.uor.dev.payload.department.CreateDepartmentRequestDTO;
+import com.uor.dev.payload.department.DepartmentResponseDTO;
 import com.uor.dev.service.DepartmentService;
 import com.uor.dev.util.ResponseEntity;
 import jakarta.inject.Inject;
@@ -22,29 +22,29 @@ public class DepartmentController {
 
   @GET
   @Path("/all")
-  public ResponseEntity<List<Department>> getAllDepartments() {
-    List<Department> departments = departmentService.getAllDepartments();
+  public ResponseEntity<List<DepartmentResponseDTO>> getAllDepartments() {
+    List<DepartmentResponseDTO> departments = departmentService.getAllDepartments();
     return ResponseEntity.ok(departments);
   }
 
   @GET
   @Path("{id}")
-  public ResponseEntity<Department> getDepartmentById(@PathParam("id") int id) {
-    Optional<Department> department = departmentService.getDepartmentById(id);
+  public ResponseEntity<DepartmentResponseDTO> getDepartmentById(@PathParam("id") int id) {
+    Optional<DepartmentResponseDTO> department = departmentService.getDepartmentById(id);
     return department.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Department not found"));
   }
 
   @POST
   @Path("/add")
-  public ResponseEntity<Department> addDepartment(@Valid CreateDepartmentRequestDTO department) {
-    Department createdDepartment = departmentService.addDepartment(department);
+  public ResponseEntity<DepartmentResponseDTO> addDepartment(@Valid CreateDepartmentRequestDTO department) {
+    DepartmentResponseDTO createdDepartment = departmentService.addDepartment(department);
     return ResponseEntity.created(createdDepartment);
   }
 
   @PUT
   @Path("/update/{id}")
-  public ResponseEntity<Department> updateDepartment(@PathParam("id") int id, @Valid CreateDepartmentRequestDTO department) {
-    Optional<Department> updatedDepartment = departmentService.updateDepartment(id, department);
+  public ResponseEntity<DepartmentResponseDTO> updateDepartment(@PathParam("id") int id, @Valid CreateDepartmentRequestDTO department) {
+    Optional<DepartmentResponseDTO> updatedDepartment = departmentService.updateDepartment(id, department);
     return updatedDepartment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Department not found"));
   }
 
@@ -58,4 +58,6 @@ public class DepartmentController {
       return ResponseEntity.notFound("Department not found");
     }
   }
+
+
 }

@@ -3,6 +3,7 @@ package com.uor.dev.service.impl;
 import com.uor.dev.entity.Department;
 import com.uor.dev.entity.Lecturer;
 import com.uor.dev.payload.lecturer.CreateLecturerRequestDTO;
+import com.uor.dev.payload.lecturer.LecturerResponseDTO;
 import com.uor.dev.payload.lecturer.UpdateLecturerRequestDTO;
 import com.uor.dev.repo.DepartmentRepository;
 import com.uor.dev.repo.LecturerRepository;
@@ -25,26 +26,52 @@ public class LectureServiceImpl implements LectureService {
   DepartmentRepository departmentRepository;
 
   @Override
-  public List<Lecturer> getAllLecturers() {
+  public List<LecturerResponseDTO> getAllLecturers() {
     List<Lecturer> lecturers = new ArrayList<>(lecturerRepository.listAll());
     if (lecturers.isEmpty()) {
       throw new RuntimeException("No lecturers found");
     }
-    return lecturers;
+    List<LecturerResponseDTO> lecturerResponseDTOs = new ArrayList<>();
+    for (Lecturer lecturer : lecturers) {
+      LecturerResponseDTO lecturerResponseDTO = LecturerResponseDTO.builder()
+              .lecturerId(lecturer.getLecturerId())
+              .firstName(lecturer.getFirstName())
+              .lastName(lecturer.getLastName())
+              .email(lecturer.getEmail())
+              .phoneNumber(lecturer.getPhoneNumber())
+              .address(lecturer.getAddress())
+              .dateOfBirth(String.valueOf(lecturer.getDateOfBirth()))
+              .departmentName(lecturer.getDepartment().getDepartmentName())
+              .build();
+      lecturerResponseDTOs.add(lecturerResponseDTO);
+    }
+    return lecturerResponseDTOs;
+
   }
 
   @Override
-  public Optional<Lecturer> getLecturerById(int id) {
+  public Optional<LecturerResponseDTO> getLecturerById(int id) {
     Optional<Lecturer> lecturer = lecturerRepository.findByLecturerId(id);
     if (lecturer.isEmpty()) {
       throw new RuntimeException("Lecturer not found");
     }
-    return lecturer;
+    LecturerResponseDTO lecturerResponseDTO = LecturerResponseDTO.builder()
+            .lecturerId(lecturer.get().getLecturerId())
+            .firstName(lecturer.get().getFirstName())
+            .lastName(lecturer.get().getLastName())
+            .email(lecturer.get().getEmail())
+            .phoneNumber(lecturer.get().getPhoneNumber())
+            .address(lecturer.get().getAddress())
+            .dateOfBirth(String.valueOf(lecturer.get().getDateOfBirth()))
+            .departmentName(lecturer.get().getDepartment().getDepartmentName())
+            .build();
+    return Optional.of(lecturerResponseDTO);
+
   }
 
   @Override
   @Transactional
-  public Lecturer addLecturer(CreateLecturerRequestDTO lecturer) {
+  public LecturerResponseDTO addLecturer(CreateLecturerRequestDTO lecturer) {
     Optional<Lecturer> existingLecturer = lecturerRepository.findByEmail(lecturer.getEmail());
     if (existingLecturer.isPresent()) {
       throw new RuntimeException("Lecturer with email " + lecturer.getEmail() + " already exists");
@@ -54,21 +81,32 @@ public class LectureServiceImpl implements LectureService {
     if (department.isEmpty()) {
       throw new RuntimeException("Department with ID " + departmentId + " not found");
     }
-    Lecturer newLecturer = new Lecturer();
-    newLecturer.setFirstName(lecturer.getFirstName());
-    newLecturer.setLastName(lecturer.getLastName());
-    newLecturer.setEmail(lecturer.getEmail());
-    newLecturer.setPhoneNumber(lecturer.getPhoneNumber());
-    newLecturer.setAddress(lecturer.getAddress());
-    newLecturer.setDateOfBirth(lecturer.getDateOfBirth());
-    newLecturer.setDepartment(department.get());
+    Lecturer newLecturer = Lecturer.builder()
+            .firstName(lecturer.getFirstName())
+            .lastName(lecturer.getLastName())
+            .email(lecturer.getEmail())
+            .phoneNumber(lecturer.getPhoneNumber())
+            .address(lecturer.getAddress())
+            .dateOfBirth(lecturer.getDateOfBirth())
+            .department(department.get())
+            .build();
     lecturerRepository.persist(newLecturer);
-    return newLecturer;
+
+    return LecturerResponseDTO.builder()
+            .lecturerId(newLecturer.getLecturerId())
+            .firstName(newLecturer.getFirstName())
+            .lastName(newLecturer.getLastName())
+            .email(newLecturer.getEmail())
+            .phoneNumber(newLecturer.getPhoneNumber())
+            .address(newLecturer.getAddress())
+            .dateOfBirth(String.valueOf(newLecturer.getDateOfBirth()))
+            .departmentName(newLecturer.getDepartment().getDepartmentName())
+            .build();
   }
 
   @Override
   @Transactional
-  public Optional<Lecturer> updateLecturer(int id, UpdateLecturerRequestDTO lecturer) {
+  public Optional<LecturerResponseDTO> updateLecturer(int id, UpdateLecturerRequestDTO lecturer) {
     Optional<Lecturer> existingLecturer = lecturerRepository.findByLecturerId(id);
     if (existingLecturer.isEmpty()) {
       throw new RuntimeException("Lecturer not found");
@@ -78,19 +116,31 @@ public class LectureServiceImpl implements LectureService {
     if (department.isEmpty()) {
       throw new RuntimeException("Department with ID " + departmentId + " not found");
     }
-    Lecturer updatedLecturer = existingLecturer.get();
-    updatedLecturer.setFirstName(lecturer.getFirstName());
-    updatedLecturer.setLastName(lecturer.getLastName());
-    updatedLecturer.setEmail(lecturer.getEmail());
-    updatedLecturer.setPhoneNumber(lecturer.getPhoneNumber());
-    updatedLecturer.setAddress(lecturer.getAddress());
-    updatedLecturer.setDateOfBirth(lecturer.getDateOfBirth());
-    updatedLecturer.setDepartment(department.get());
-    lecturerRepository.persist(updatedLecturer);
-    return Optional.of(updatedLecturer);
+    Lecturer updatedLecturer = Lecturer.builder()
+            .lecturerId(existingLecturer.get().getLecturerId())
+            .firstName(lecturer.getFirstName())
+            .lastName(lecturer.getLastName())
+            .email(lecturer.getEmail())
+            .phoneNumber(lecturer.getPhoneNumber())
+            .address(lecturer.getAddress())
+            .dateOfBirth(lecturer.getDateOfBirth())
+            .department(department.get())
+            .build();
+
+    return Optional.of(LecturerResponseDTO.builder()
+            .lecturerId(updatedLecturer.getLecturerId())
+            .firstName(updatedLecturer.getFirstName())
+            .lastName(updatedLecturer.getLastName())
+            .email(updatedLecturer.getEmail())
+            .phoneNumber(updatedLecturer.getPhoneNumber())
+            .address(updatedLecturer.getAddress())
+            .dateOfBirth(String.valueOf(updatedLecturer.getDateOfBirth()))
+            .departmentName(updatedLecturer.getDepartment().getDepartmentName())
+            .build());
   }
 
   @Override
+  @Transactional
   public boolean deleteLecturer(int id) {
     Optional<Lecturer> lecturer = lecturerRepository.findByLecturerId(id);
     if (lecturer.isEmpty()) {
