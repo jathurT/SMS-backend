@@ -1,7 +1,7 @@
 package com.uor.dev.controller;
 
 import com.uor.dev.entity.Department;
-import com.uor.dev.payload.department.CreateDepartmentRequestDTO;
+import com.uor.dev.payload.department.CreateCourseRequestDTO;
 import com.uor.dev.service.DepartmentService;
 import com.uor.dev.util.ResponseEntity;
 import jakarta.inject.Inject;
@@ -36,14 +36,14 @@ public class DepartmentController {
 
   @POST
   @Path("/add")
-  public ResponseEntity<Department> addDepartment(@Valid CreateDepartmentRequestDTO department) {
+  public ResponseEntity<Department> addDepartment(@Valid CreateCourseRequestDTO department) {
     Department createdDepartment = departmentService.addDepartment(department);
     return ResponseEntity.created(createdDepartment);
   }
 
   @PUT
   @Path("/update/{id}")
-  public ResponseEntity<Department> updateDepartment(@PathParam("id") int id, @Valid CreateDepartmentRequestDTO department) {
+  public ResponseEntity<Department> updateDepartment(@PathParam("id") int id, @Valid CreateCourseRequestDTO department) {
     Optional<Department> updatedDepartment = departmentService.updateDepartment(id, department);
     return updatedDepartment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Department not found"));
   }
@@ -58,4 +58,6 @@ public class DepartmentController {
       return ResponseEntity.notFound("Department not found");
     }
   }
+
+
 }

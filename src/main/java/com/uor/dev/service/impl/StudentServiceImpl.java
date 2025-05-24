@@ -45,13 +45,13 @@ public class StudentServiceImpl implements StudentService {
       throw new RuntimeException("Student with email " + student.getEmail() + " already exists");
     }
 
-    Student newStudent = new Student();
-    newStudent.setFirstName(student.getFirstName());
-    newStudent.setLastName(student.getLastName());
-    newStudent.setEmail(student.getEmail());
-    newStudent.setPhoneNumber(student.getPhoneNumber());
-    newStudent.setAddress(student.getAddress());
-    newStudent.setDateOfBirth(student.getDateOfBirth());
+    Student newStudent = Student.builder()
+            .firstName(student.getFirstName())
+            .lastName(student.getLastName())
+            .email(student.getEmail())
+            .phoneNumber(student.getPhoneNumber())
+            .dateOfBirth(student.getDateOfBirth())
+            .build();
 
     studentRepository.persist(newStudent);
     return newStudent;
@@ -64,12 +64,23 @@ public class StudentServiceImpl implements StudentService {
     if (existingStudent.isEmpty()) {
       throw new RuntimeException("Student not found");
     }
-    Student updatedStudent = existingStudent.get();
-    updatedStudent.setFirstName(student.getFirstName());
-    updatedStudent.setLastName(student.getLastName());
-    updatedStudent.setEmail(student.getEmail());
-    updatedStudent.setPhoneNumber(student.getPhoneNumber());
-    updatedStudent.setDateOfBirth(student.getDateOfBirth());
+    if (!existingStudent.get().getEmail().equals(student.getEmail())) {
+      Optional<Student> studentWithSameEmail = studentRepository.findByEmail(student.getEmail());
+      if (studentWithSameEmail.isPresent()) {
+        throw new RuntimeException("Student with email " + student.getEmail() + " already exists");
+      }
+    }
+    Student updatedStudent = Student.builder()
+            .studentId(existingStudent.get().getStudentId())
+            .firstName(student.getFirstName())
+            .lastName(student.getLastName())
+            .email(student.getEmail())
+            .phoneNumber(student.getPhoneNumber())
+            .address(student.getAddress())
+            .dateOfBirth(student.getDateOfBirth())
+            .enrollments(existingStudent.get().getEnrollments())
+            .sessions(existingStudent.get().getSessions())
+            .build();
     studentRepository.persist(updatedStudent);
     return Optional.of(updatedStudent);
   }

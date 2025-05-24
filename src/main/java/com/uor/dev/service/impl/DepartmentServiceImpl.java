@@ -1,7 +1,7 @@
 package com.uor.dev.service.impl;
 
 import com.uor.dev.entity.Department;
-import com.uor.dev.payload.department.CreateDepartmentRequestDTO;
+import com.uor.dev.payload.department.CreateCourseRequestDTO;
 import com.uor.dev.repo.DepartmentRepository;
 import com.uor.dev.service.DepartmentService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -38,7 +38,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
   @Override
   @Transactional
-  public Department addDepartment(CreateDepartmentRequestDTO department) {
+  public Department addDepartment(CreateCourseRequestDTO department) {
     Optional<Department> existingDepartment = departmentRepository.findByDepartmentName(department.getDepartmentName());
     if (existingDepartment.isPresent()) {
       throw new RuntimeException("Department with name " + department.getDepartmentName() + " already exists");
@@ -52,7 +52,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
   @Override
   @Transactional
-  public Optional<Department> updateDepartment(int id, CreateDepartmentRequestDTO department) {
+  public Optional<Department> updateDepartment(int id, CreateCourseRequestDTO department) {
     Optional<Department> existingDepartment = departmentRepository.findByDepartmentId(id);
     if (existingDepartment.isEmpty()) {
       throw new RuntimeException("Department not found");
