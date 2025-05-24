@@ -1,6 +1,5 @@
 package com.uor.dev.service;
 
-import com.uor.dev.entity.Lecturer;
 import com.uor.dev.payload.lecturer.CreateLecturerRequestDTO;
 import com.uor.dev.payload.lecturer.LecturerResponseDTO;
 import com.uor.dev.payload.lecturer.UpdateLecturerRequestDTO;

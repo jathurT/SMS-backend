@@ -19,7 +19,7 @@ public class StudentResponseDTO {
   private String dateOfBirth;
 
   @Builder(builderMethodName = "basicBuilder")
-  public StudentResponseDTO(String firstName, String email,String phoneNumber) {
+  public StudentResponseDTO(String firstName, String email, String phoneNumber) {
     this.firstName = firstName;
     this.email = email;
     this.phoneNumber = phoneNumber;

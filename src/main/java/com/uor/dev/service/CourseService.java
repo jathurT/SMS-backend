@@ -1,6 +1,5 @@
 package com.uor.dev.service;
 
-import com.uor.dev.entity.Course;
 import com.uor.dev.payload.course.CourseResponseDTO;
 import com.uor.dev.payload.course.CreateCourseRequestDTO;
 import jakarta.validation.Valid;

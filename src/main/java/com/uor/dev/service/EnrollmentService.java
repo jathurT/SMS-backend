@@ -1,6 +1,5 @@
 package com.uor.dev.service;
 
-import com.uor.dev.entity.Enrollment;
 import com.uor.dev.payload.enrollment.EnrollmentResponseDTO;
 
 import java.util.List;

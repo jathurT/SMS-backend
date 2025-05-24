@@ -1,6 +1,5 @@
 package com.uor.dev.service;
 
-import com.uor.dev.entity.Student;
 import com.uor.dev.payload.student.CreateStudentRequestDTO;
 import com.uor.dev.payload.student.StudentResponseDTO;
 import com.uor.dev.payload.student.UpdateStudentRequestDTO;
