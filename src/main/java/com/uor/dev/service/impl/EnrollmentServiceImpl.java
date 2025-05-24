@@ -9,6 +9,7 @@ import com.uor.dev.repo.StudentRepository;
 import com.uor.dev.service.EnrollmentService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   }
 
   @Override
+  @Transactional
   public boolean deleteEnrollment(int id) {
     Optional<Enrollment> enrollment = enrollmentRepository.findByEnrollmentId(id);
     if (enrollment.isEmpty()) {
@@ -55,6 +57,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   }
 
   @Override
+  @Transactional
   public Enrollment addEnrollment(int courseId, int studentId) {
     Course course = courseRepository.findByCourseId(courseId)
             .orElseThrow(() -> new RuntimeException("Course not found"));

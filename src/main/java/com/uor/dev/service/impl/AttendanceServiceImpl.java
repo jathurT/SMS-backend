@@ -75,6 +75,7 @@ public class AttendanceServiceImpl implements AttendanceService {
   }
 
   @Override
+  @Transactional
   public boolean deleteAttendance(int sessionId, int studentId) {
     Optional<Attendance> attendance = attendanceRepository.findBySessionIdAndStudentId(sessionId, studentId);
     if (attendance.isEmpty()) {

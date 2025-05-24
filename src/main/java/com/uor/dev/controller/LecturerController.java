@@ -1,7 +1,7 @@
 package com.uor.dev.controller;
 
-import com.uor.dev.entity.Lecturer;
 import com.uor.dev.payload.lecturer.CreateLecturerRequestDTO;
+import com.uor.dev.payload.lecturer.LecturerResponseDTO;
 import com.uor.dev.payload.lecturer.UpdateLecturerRequestDTO;
 import com.uor.dev.service.LectureService;
 import com.uor.dev.util.ResponseEntity;
@@ -23,29 +23,29 @@ public class LecturerController {
 
   @GET
   @Path("/all")
-  public ResponseEntity<List<Lecturer>> getAllLecturers() {
-    List<Lecturer> lecturers = lectureService.getAllLecturers();
+  public ResponseEntity<List<LecturerResponseDTO>> getAllLecturers() {
+    List<LecturerResponseDTO> lecturers = lectureService.getAllLecturers();
     return ResponseEntity.ok(lecturers);
   }
 
   @GET
   @Path("/{id}")
-  public ResponseEntity<Lecturer> getLecturerById(@PathParam("id") int id) {
-    Optional<Lecturer> lecturer = lectureService.getLecturerById(id);
+  public ResponseEntity<LecturerResponseDTO> getLecturerById(@PathParam("id") int id) {
+    Optional<LecturerResponseDTO> lecturer = lectureService.getLecturerById(id);
     return lecturer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Lecturer not found"));
   }
 
   @POST
   @Path("/add")
-  public ResponseEntity<Lecturer> addLecturer(@Valid CreateLecturerRequestDTO lecturer) {
-    Lecturer createdLecturer = lectureService.addLecturer(lecturer);
+  public ResponseEntity<LecturerResponseDTO> addLecturer(@Valid CreateLecturerRequestDTO lecturer) {
+    LecturerResponseDTO createdLecturer = lectureService.addLecturer(lecturer);
     return ResponseEntity.created(createdLecturer);
   }
 
   @PUT
   @Path("/update/{id}")
-  public ResponseEntity<Lecturer> updateLecturer(@PathParam("id") int id, @Valid UpdateLecturerRequestDTO lecturer) {
-    Optional<Lecturer> updatedLecturer = lectureService.updateLecturer(id, lecturer);
+  public ResponseEntity<LecturerResponseDTO> updateLecturer(@PathParam("id") int id, @Valid UpdateLecturerRequestDTO lecturer) {
+    Optional<LecturerResponseDTO> updatedLecturer = lectureService.updateLecturer(id, lecturer);
     return updatedLecturer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Lecturer not found"));
   }
 

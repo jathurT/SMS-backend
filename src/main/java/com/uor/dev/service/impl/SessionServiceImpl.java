@@ -46,6 +46,7 @@ public class SessionServiceImpl implements SessionService {
   }
 
   @Override
+  @Transactional
   public boolean deleteSession(int id) {
     Optional<Session> session = sessionRepository.findBySessionId(id);
     if (session.isEmpty()) {

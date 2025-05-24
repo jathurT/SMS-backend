@@ -2,6 +2,7 @@ package com.uor.dev.service;
 
 import com.uor.dev.entity.Lecturer;
 import com.uor.dev.payload.lecturer.CreateLecturerRequestDTO;
+import com.uor.dev.payload.lecturer.LecturerResponseDTO;
 import com.uor.dev.payload.lecturer.UpdateLecturerRequestDTO;
 
 import java.util.List;
@@ -9,13 +10,13 @@ import java.util.Optional;
 
 public interface LectureService {
 
-  List<Lecturer> getAllLecturers();
+  List<LecturerResponseDTO> getAllLecturers();
 
-  Optional<Lecturer> getLecturerById(int id);
+  Optional<LecturerResponseDTO> getLecturerById(int id);
 
-  Lecturer addLecturer(CreateLecturerRequestDTO lecturer);
+  LecturerResponseDTO addLecturer(CreateLecturerRequestDTO lecturer);
 
-  Optional<Lecturer> updateLecturer(int id, UpdateLecturerRequestDTO lecturer);
+  Optional<LecturerResponseDTO> updateLecturer(int id, UpdateLecturerRequestDTO lecturer);
 
   boolean deleteLecturer(int id);
 }

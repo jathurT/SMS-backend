@@ -16,4 +16,8 @@ public class EnrollmentRepository implements PanacheRepository<Enrollment> {
   public List<Enrollment> findByStudentId(int studentId) {
     return find("student.studentId", studentId).list();
   }
+
+  public Integer countByCourseId(Integer courseId) {
+    return (int) count("course.courseId", courseId);
+  }
 }

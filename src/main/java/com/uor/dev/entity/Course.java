@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,7 @@ public class Course {
 
   @Id
   @Column(name = "course_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer courseId;
 
   @Column(name = "course_name", nullable = false)
@@ -34,7 +36,7 @@ public class Course {
   private String semester;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDate createdAt;
+  private LocalDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "department_id", nullable = false)

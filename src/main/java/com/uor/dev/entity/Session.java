@@ -21,6 +21,7 @@ public class Session {
 
   @Id
   @Column(name = "session_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer sessionId;
 
   @Column(name = "date", nullable = false)

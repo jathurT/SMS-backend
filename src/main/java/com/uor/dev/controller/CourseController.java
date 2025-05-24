@@ -1,6 +1,6 @@
 package com.uor.dev.controller;
 
-import com.uor.dev.entity.Course;
+import com.uor.dev.payload.course.CourseResponseDTO;
 import com.uor.dev.payload.course.CreateCourseRequestDTO;
 import com.uor.dev.service.CourseService;
 import com.uor.dev.util.ResponseEntity;
@@ -22,15 +22,15 @@ public class CourseController {
 
   @GET
   @Path("/all")
-  public ResponseEntity<List<Course>> getAllCourses() {
-    List<Course> courses = courseService.getAllCourses();
+  public ResponseEntity<List<CourseResponseDTO>> getAllCourses() {
+    List<CourseResponseDTO> courses = courseService.getAllCourses();
     return ResponseEntity.ok(courses);
   }
 
   @GET
   @Path("/{id}")
-  public ResponseEntity<Course> getCourseById(@PathParam("id") int id) {
-    Optional<Course> course = courseService.getCourseById(id);
+  public ResponseEntity<CourseResponseDTO> getCourseById(@PathParam("id") int id) {
+    Optional<CourseResponseDTO> course = courseService.getCourseById(id);
     return course.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Course not found"));
   }
 
@@ -47,15 +47,15 @@ public class CourseController {
 
   @POST
   @Path("/add")
-  public ResponseEntity<Course> addCourse(@Valid CreateCourseRequestDTO course) {
-    Course createdCourse = courseService.addCourse(course);
+  public ResponseEntity<CourseResponseDTO> addCourse(@Valid CreateCourseRequestDTO course) {
+    CourseResponseDTO createdCourse = courseService.addCourse(course);
     return ResponseEntity.created(createdCourse);
   }
 
   @PUT
   @Path("/update/{id}")
-  public ResponseEntity<Course> updateCourse(@PathParam("id") int id, @Valid CreateCourseRequestDTO course) {
-    Optional<Course> updatedCourse = courseService.updateCourse(id, course);
+  public ResponseEntity<CourseResponseDTO> updateCourse(@PathParam("id") int id, @Valid CreateCourseRequestDTO course) {
+    Optional<CourseResponseDTO> updatedCourse = courseService.updateCourse(id, course);
     return updatedCourse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Course not found"));
   }
 }

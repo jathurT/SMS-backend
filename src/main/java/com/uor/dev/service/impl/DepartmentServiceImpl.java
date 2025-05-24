@@ -1,7 +1,8 @@
 package com.uor.dev.service.impl;
 
 import com.uor.dev.entity.Department;
-import com.uor.dev.payload.department.CreateCourseRequestDTO;
+import com.uor.dev.payload.department.CreateDepartmentRequestDTO;
+import com.uor.dev.payload.department.DepartmentResponseDTO;
 import com.uor.dev.repo.DepartmentRepository;
 import com.uor.dev.service.DepartmentService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,52 +20,74 @@ public class DepartmentServiceImpl implements DepartmentService {
   DepartmentRepository departmentRepository;
 
   @Override
-  public List<Department> getAllDepartments() {
-    List<Department> departments = new ArrayList<>(departmentRepository.listAll());
+  public List<DepartmentResponseDTO> getAllDepartments() {
+    List<Department> departments = departmentRepository.listAll();
     if (departments.isEmpty()) {
       throw new RuntimeException("No departments found");
     }
-    return departments;
+    List<DepartmentResponseDTO> response = new ArrayList<>();
+    for (Department department : departments) {
+      DepartmentResponseDTO dto = new DepartmentResponseDTO();
+      dto.setDepartmentId(department.getDepartmentId());
+      dto.setDepartmentName(department.getDepartmentName());
+      response.add(dto);
+    }
+    return response;
   }
 
   @Override
-  public Optional<Department> getDepartmentById(int id) {
+  public Optional<DepartmentResponseDTO> getDepartmentById(int id) {
     Optional<Department> department = departmentRepository.findByDepartmentId(id);
     if (department.isEmpty()) {
       throw new RuntimeException("Department not found");
     }
-    return department;
+    DepartmentResponseDTO response = new DepartmentResponseDTO();
+    response.setDepartmentId(department.get().getDepartmentId());
+    response.setDepartmentName(department.get().getDepartmentName());
+    return Optional.of(response);
   }
 
   @Override
   @Transactional
-  public Department addDepartment(CreateCourseRequestDTO department) {
-    Optional<Department> existingDepartment = departmentRepository.findByDepartmentName(department.getDepartmentName());
-    if (existingDepartment.isPresent()) {
-      throw new RuntimeException("Department with name " + department.getDepartmentName() + " already exists");
+  public DepartmentResponseDTO addDepartment(CreateDepartmentRequestDTO department) {
+    if (departmentRepository.findByDepartmentName(department.getDepartmentName()).isPresent()) {
+      throw new RuntimeException("Department with this name already exists");
     }
-
     Department newDepartment = new Department();
     newDepartment.setDepartmentName(department.getDepartmentName());
     departmentRepository.persist(newDepartment);
-    return newDepartment;
+
+    DepartmentResponseDTO response = new DepartmentResponseDTO();
+    response.setDepartmentId(newDepartment.getDepartmentId());
+    response.setDepartmentName(newDepartment.getDepartmentName());
+    return response;
   }
 
   @Override
   @Transactional
-  public Optional<Department> updateDepartment(int id, CreateCourseRequestDTO department) {
+  public Optional<DepartmentResponseDTO> updateDepartment(int id, CreateDepartmentRequestDTO department) {
     Optional<Department> existingDepartment = departmentRepository.findByDepartmentId(id);
     if (existingDepartment.isEmpty()) {
       throw new RuntimeException("Department not found");
     }
+    Department departmentToUpdate = existingDepartment.get();
 
-    Department updatedDepartment = existingDepartment.get();
-    updatedDepartment.setDepartmentName(department.getDepartmentName());
-    departmentRepository.persist(updatedDepartment);
-    return Optional.of(updatedDepartment);
+    if (departmentRepository.findByDepartmentName(department.getDepartmentName()).isPresent() &&
+            departmentToUpdate.getDepartmentName().equals(department.getDepartmentName())) {
+      throw new RuntimeException("Department with this name already exists");
+    }
+
+    departmentToUpdate.setDepartmentName(department.getDepartmentName());
+    departmentRepository.persist(departmentToUpdate);
+
+    DepartmentResponseDTO response = new DepartmentResponseDTO();
+    response.setDepartmentId(departmentToUpdate.getDepartmentId());
+    response.setDepartmentName(departmentToUpdate.getDepartmentName());
+    return Optional.of(response);
   }
 
   @Override
+  @Transactional
   public boolean deleteDepartment(int id) {
     Optional<Department> existingDepartment = departmentRepository.findByDepartmentId(id);
     if (existingDepartment.isEmpty()) {

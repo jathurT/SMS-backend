@@ -16,4 +16,9 @@ public class StudentRepository implements PanacheRepository<Student> {
   public Optional<Student> findByEmail(String email) {
     return find("email", email).firstResultOptional();
   }
+
+
+  public Integer countByCourseId(Integer courseId) {
+    return (int) count("courseId", courseId);
+  }
 }
