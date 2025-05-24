@@ -3,6 +3,7 @@ package com.uor.dev.service.impl;
 import com.uor.dev.entity.Course;
 import com.uor.dev.entity.Enrollment;
 import com.uor.dev.entity.Student;
+import com.uor.dev.payload.enrollment.EnrollmentResponseDTO;
 import com.uor.dev.repo.CourseRepository;
 import com.uor.dev.repo.EnrollmentRepository;
 import com.uor.dev.repo.StudentRepository;
@@ -28,21 +29,31 @@ public class EnrollmentServiceImpl implements EnrollmentService {
   StudentRepository studentRepository;
 
   @Override
-  public List<Enrollment> getAllEnrollments() {
-    List<Enrollment> enrollments = new ArrayList<>(enrollmentRepository.listAll());
+  public List<EnrollmentResponseDTO> getAllEnrollments() {
+    List<Enrollment> enrollments = enrollmentRepository.listAll();
     if (enrollments.isEmpty()) {
       throw new RuntimeException("No enrollments found");
     }
-    return enrollments;
+    return getEnrollmentResponseDTOS(enrollments);
   }
 
   @Override
-  public Optional<Enrollment> getEnrollmentById(int id) {
+  public Optional<EnrollmentResponseDTO> getEnrollmentById(int id) {
     Optional<Enrollment> enrollment = enrollmentRepository.findByEnrollmentId(id);
     if (enrollment.isEmpty()) {
       throw new RuntimeException("Enrollment not found");
     }
-    return enrollment;
+    Enrollment e = enrollment.get();
+    EnrollmentResponseDTO dto = EnrollmentResponseDTO.builder()
+            .enrollmentId(e.getEnrollmentId())
+            .courseId(e.getCourse().getCourseId())
+            .courseName(e.getCourse().getCourseName())
+            .courseCode(e.getCourse().getCourseCode())
+            .studentId(e.getStudent().getStudentId())
+            .studentName(e.getStudent().getFirstName() + " " + e.getStudent().getLastName())
+            .enrollmentDate(e.getEnrollmentDate().toString())
+            .build();
+    return Optional.of(dto);
   }
 
   @Override
@@ -58,29 +69,68 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
   @Override
   @Transactional
-  public Enrollment addEnrollment(int courseId, int studentId) {
-    Course course = courseRepository.findByCourseId(courseId)
-            .orElseThrow(() -> new RuntimeException("Course not found"));
+  public EnrollmentResponseDTO addEnrollment(int courseId, int studentId) {
+    Optional<Course> courseOpt = courseRepository.findByCourseId(courseId);
+    if (courseOpt.isEmpty()) {
+      throw new RuntimeException("Course not found with ID " + courseId);
+    }
+    Course course = courseOpt.get();
 
-    Student student = studentRepository.findByStudentId(studentId)
-            .orElseThrow(() -> new RuntimeException("Student not found"));
+    Optional<Student> studentOpt = studentRepository.findByStudentId(studentId);
+    if (studentOpt.isEmpty()) {
+      throw new RuntimeException("Student not found with ID " + studentId);
+    }
+    Student student = studentOpt.get();
 
-    Enrollment enrollment = Enrollment.builder()
-            .course(course)
-            .student(student)
-            .enrollmentDate(LocalDate.now())
-            .build();
+    Enrollment enrollment = new Enrollment();
+    enrollment.setCourse(course);
+    enrollment.setStudent(student);
+    enrollment.setEnrollmentDate(LocalDate.now());
+
     enrollmentRepository.persist(enrollment);
-    return enrollment;
+
+    return EnrollmentResponseDTO.builder()
+            .enrollmentId(enrollment.getEnrollmentId())
+            .courseId(course.getCourseId())
+            .courseName(course.getCourseName())
+            .courseCode(course.getCourseCode())
+            .studentId(student.getStudentId())
+            .studentName(student.getFirstName() + " " + student.getLastName())
+            .enrollmentDate(enrollment.getEnrollmentDate().toString())
+            .build();
   }
 
   @Override
-  public List<Enrollment> getEnrollmentsByStudentId(int studentId) {
-    List<Enrollment> enrollments = enrollmentRepository.findByStudentId(studentId);
+  public List<EnrollmentResponseDTO> getEnrollmentsByStudentId(int studentId) {
+    Optional<Student> studentOpt = studentRepository.findByStudentId(studentId);
+    if (studentOpt.isEmpty()) {
+      throw new RuntimeException("Student not found with ID " + studentId);
+    }
+    Student student = studentOpt.get();
+
+    List<Enrollment> enrollments = enrollmentRepository.findByStudent(student);
     if (enrollments.isEmpty()) {
       throw new RuntimeException("No enrollments found for student with ID " + studentId);
     }
-    return enrollments;
+
+    return getEnrollmentResponseDTOS(enrollments);
+  }
+
+  private List<EnrollmentResponseDTO> getEnrollmentResponseDTOS(List<Enrollment> enrollments) {
+    List<EnrollmentResponseDTO> response = new ArrayList<>();
+    for (Enrollment enrollment : enrollments) {
+      EnrollmentResponseDTO dto = EnrollmentResponseDTO.builder()
+              .enrollmentId(enrollment.getEnrollmentId())
+              .courseId(enrollment.getCourse().getCourseId())
+              .courseName(enrollment.getCourse().getCourseName())
+              .courseCode(enrollment.getCourse().getCourseCode())
+              .studentId(enrollment.getStudent().getStudentId())
+              .studentName(enrollment.getStudent().getFirstName() + " " + enrollment.getStudent().getLastName())
+              .enrollmentDate(enrollment.getEnrollmentDate().toString())
+              .build();
+      response.add(dto);
+    }
+    return response;
   }
 
 

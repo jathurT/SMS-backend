@@ -1,17 +1,17 @@
 package com.uor.dev.service;
 
-import com.uor.dev.entity.Attendance;
+import com.uor.dev.payload.attendance.AttendanceResponseDTO;
 
 import java.util.List;
 
 public interface AttendanceService {
-  List<Attendance> getAllAttendances();
+  List<AttendanceResponseDTO> getAllAttendances();
 
-  List<Attendance> getAttendancesBySessionId(int sessionId);
+  List<AttendanceResponseDTO> getAttendancesBySessionId(int sessionId);
 
-  List<Attendance> getAttendancesByStudentId(int studentId);
+  List<AttendanceResponseDTO> getAttendancesByStudentId(int studentId);
 
-  Attendance addAttendance(int sessionId, int studentId);
+  AttendanceResponseDTO addAttendance(int sessionId, int studentId);
 
   boolean deleteAttendance(int sessionId, int studentId);
 }

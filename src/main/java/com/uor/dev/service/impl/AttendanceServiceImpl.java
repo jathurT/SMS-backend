@@ -1,6 +1,9 @@
 package com.uor.dev.service.impl;
 
 import com.uor.dev.entity.Attendance;
+import com.uor.dev.entity.Session;
+import com.uor.dev.entity.Student;
+import com.uor.dev.payload.attendance.AttendanceResponseDTO;
 import com.uor.dev.repo.AttendanceRepository;
 import com.uor.dev.repo.SessionRepository;
 import com.uor.dev.repo.StudentRepository;
@@ -25,16 +28,29 @@ public class AttendanceServiceImpl implements AttendanceService {
   StudentRepository studentRepository;
 
   @Override
-  public List<Attendance> getAllAttendances() {
+  public List<AttendanceResponseDTO> getAllAttendances() {
     List<Attendance> attendances = attendanceRepository.listAll();
     if (attendances.isEmpty()) {
       throw new RuntimeException("No attendances found");
     }
-    return attendances;
+    return getAttendanceResponseDTOS(attendances);
+  }
+
+  private List<AttendanceResponseDTO> getAttendanceResponseDTOS(List<Attendance> attendances) {
+    return attendances.stream().map(attendance -> AttendanceResponseDTO.builder()
+            .studentId(attendance.getStudentId())
+            .studentName(attendance.getStudent().getFirstName() + " " + attendance.getStudent().getLastName())
+            .sessionId(attendance.getSessionId())
+            .sessionName(attendance.getSession().getCourse().getCourseName())
+            .lecturerName(attendance.getSession().getLecturer().getFirstName() + " " + attendance.getSession().getLecturer().getLastName())
+            .date(String.valueOf(attendance.getSession().getDate()))
+            .startTime(String.valueOf(attendance.getSession().getStartTime()))
+            .endTime(String.valueOf(attendance.getSession().getEndTime()))
+            .build()).toList();
   }
 
   @Override
-  public List<Attendance> getAttendancesBySessionId(int sessionId) {
+  public List<AttendanceResponseDTO> getAttendancesBySessionId(int sessionId) {
     if (sessionRepository.findBySessionId(sessionId).isEmpty()) {
       throw new RuntimeException("Session not found");
     }
@@ -42,11 +58,11 @@ public class AttendanceServiceImpl implements AttendanceService {
     if (attendances.isEmpty()) {
       throw new RuntimeException("No attendances found for session ID: " + sessionId);
     }
-    return attendances;
+    return getAttendanceResponseDTOS(attendances);
   }
 
   @Override
-  public List<Attendance> getAttendancesByStudentId(int studentId) {
+  public List<AttendanceResponseDTO> getAttendancesByStudentId(int studentId) {
     if (studentRepository.findByStudentId(studentId).isEmpty()) {
       throw new RuntimeException("Student not found");
     }
@@ -54,24 +70,44 @@ public class AttendanceServiceImpl implements AttendanceService {
     if (attendances.isEmpty()) {
       throw new RuntimeException("No attendances found for student ID: " + studentId);
     }
-    return attendances;
+    return getAttendanceResponseDTOS(attendances);
   }
 
   @Override
   @Transactional
-  public Attendance addAttendance(int sessionId, int studentId) {
-    if (sessionRepository.findBySessionId(sessionId).isEmpty()) {
+  public AttendanceResponseDTO addAttendance(int sessionId, int studentId) {
+    Optional<Session> sessionOpt = sessionRepository.findBySessionId(sessionId);
+    Optional<Student> studentOpt = studentRepository.findByStudentId(studentId);
+
+    if (sessionOpt.isEmpty()) {
       throw new RuntimeException("Session not found");
     }
-    if (studentRepository.findByStudentId(studentId).isEmpty()) {
+    if (studentOpt.isEmpty()) {
       throw new RuntimeException("Student not found");
+    }
+
+    if (attendanceRepository.existsBySessionIdAndStudentId(sessionId, studentId)) {
+      throw new RuntimeException("Attendance already exists for session ID: " + sessionId + " and student ID: " + studentId);
     }
 
     Attendance attendance = new Attendance();
     attendance.setSessionId(sessionId);
     attendance.setStudentId(studentId);
     attendanceRepository.persist(attendance);
-    return attendance;
+
+    Session session = sessionOpt.get();
+    Student student = studentOpt.get();
+
+    return AttendanceResponseDTO.builder()
+            .studentId(studentId)
+            .studentName(student.getFirstName() + " " + student.getLastName())
+            .sessionId(sessionId)
+            .sessionName(session.getCourse().getCourseName())
+            .lecturerName(session.getLecturer().getFirstName() + " " + session.getLecturer().getLastName())
+            .date(String.valueOf(session.getDate()))
+            .startTime(String.valueOf(session.getStartTime()))
+            .endTime(String.valueOf(session.getEndTime()))
+            .build();
   }
 
   @Override
@@ -84,6 +120,4 @@ public class AttendanceServiceImpl implements AttendanceService {
     attendanceRepository.delete(attendance.get());
     return true;
   }
-
-
 }

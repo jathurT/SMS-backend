@@ -2,18 +2,20 @@ package com.uor.dev.service;
 
 import com.uor.dev.entity.Session;
 import com.uor.dev.payload.session.CreateSessionRequestDTO;
+import com.uor.dev.payload.session.SessionResponseDTO;
+import com.uor.dev.payload.session.UpdateSessionRequestDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface SessionService {
-  List<Session> getAllSessions();
+  List<SessionResponseDTO> getAllSessions();
 
-  Optional<Session> getSessionById(int id);
+  Optional<SessionResponseDTO> getSessionById(int id);
 
   boolean deleteSession(int id);
 
-  Session addSession(int courseId, int lecturerId, CreateSessionRequestDTO createSessionRequestDTO);
+  SessionResponseDTO addSession(int courseId, int lecturerId, CreateSessionRequestDTO createSessionRequestDTO);
 
-  Optional<Session> updateSession(int id, CreateSessionRequestDTO session);
+  Optional<SessionResponseDTO> updateSession(int id, UpdateSessionRequestDTO session);
 }

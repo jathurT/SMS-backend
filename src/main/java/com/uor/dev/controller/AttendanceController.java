@@ -1,6 +1,6 @@
 package com.uor.dev.controller;
 
-import com.uor.dev.entity.Attendance;
+import com.uor.dev.payload.attendance.AttendanceResponseDTO;
 import com.uor.dev.service.AttendanceService;
 import com.uor.dev.util.ResponseEntity;
 import jakarta.inject.Inject;
@@ -19,37 +19,37 @@ public class AttendanceController {
 
   @GET
   @Path("/all")
-  public ResponseEntity<List<Attendance>> getAllAttendances() {
-    List<Attendance> attendances = attendanceService.getAllAttendances();
+  public ResponseEntity<List<AttendanceResponseDTO>> getAllAttendances() {
+    List<AttendanceResponseDTO> attendances = attendanceService.getAllAttendances();
     return ResponseEntity.ok(attendances);
   }
 
   @GET
   @Path("/session/{sessionId}")
-  public ResponseEntity<List<Attendance>> getAttendancesBySessionId(@PathParam("sessionId") int sessionId) {
-    List<Attendance> attendances = attendanceService.getAttendancesBySessionId(sessionId);
+  public ResponseEntity<List<AttendanceResponseDTO>> getAttendancesBySessionId(@PathParam("sessionId") int sessionId) {
+    List<AttendanceResponseDTO> attendances = attendanceService.getAttendancesBySessionId(sessionId);
     return ResponseEntity.ok(attendances);
   }
 
   @GET
   @Path("/student/{studentId}")
-  public ResponseEntity<List<Attendance>> getAttendancesByStudentId(@PathParam("studentId") int studentId) {
-    List<Attendance> attendances = attendanceService.getAttendancesByStudentId(studentId);
+  public ResponseEntity<List<AttendanceResponseDTO>> getAttendancesByStudentId(@PathParam("studentId") int studentId) {
+    List<AttendanceResponseDTO> attendances = attendanceService.getAttendancesByStudentId(studentId);
     return ResponseEntity.ok(attendances);
   }
 
   @POST
   @Path("/add/session/{sessionId}/student/{studentId}")
-  public ResponseEntity<Attendance> addAttendance(@PathParam("sessionId") int sessionId,
-                                                  @PathParam("studentId") int studentId) {
-    Attendance createdAttendance = attendanceService.addAttendance(sessionId, studentId);
+  public ResponseEntity<AttendanceResponseDTO> addAttendance(@PathParam("sessionId") int sessionId,
+                                                             @PathParam("studentId") int studentId) {
+    AttendanceResponseDTO createdAttendance = attendanceService.addAttendance(sessionId, studentId);
     return ResponseEntity.created(createdAttendance);
   }
 
   @DELETE
   @Path("/delete/session/{sessionId}/student/{studentId}")
   public ResponseEntity<Void> deleteAttendance(@PathParam("sessionId") int sessionId,
-                                                @PathParam("studentId") int studentId) {
+                                               @PathParam("studentId") int studentId) {
     boolean deleted = attendanceService.deleteAttendance(sessionId, studentId);
     if (deleted) {
       return ResponseEntity.noContent();

@@ -1,7 +1,8 @@
 package com.uor.dev.controller;
 
-import com.uor.dev.entity.Session;
 import com.uor.dev.payload.session.CreateSessionRequestDTO;
+import com.uor.dev.payload.session.SessionResponseDTO;
+import com.uor.dev.payload.session.UpdateSessionRequestDTO;
 import com.uor.dev.service.SessionService;
 import com.uor.dev.util.ResponseEntity;
 import jakarta.inject.Inject;
@@ -21,15 +22,15 @@ public class SessionController {
 
   @GET
   @Path("/all")
-  public ResponseEntity<List<Session>> getAllSessions() {
-    List<Session> sessions = sessionService.getAllSessions();
+  public ResponseEntity<List<SessionResponseDTO>> getAllSessions() {
+    List<SessionResponseDTO> sessions = sessionService.getAllSessions();
     return ResponseEntity.ok(sessions);
   }
 
   @GET
   @Path("/{id}")
-  public ResponseEntity<Session> getSessionById(@PathParam("id") int id) {
-    Optional<Session> session = sessionService.getSessionById(id);
+  public ResponseEntity<SessionResponseDTO> getSessionById(@PathParam("id") int id) {
+    Optional<SessionResponseDTO> session = sessionService.getSessionById(id);
     return session.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Session not found"));
   }
 
@@ -46,18 +47,18 @@ public class SessionController {
 
   @POST
   @Path("/add/course/{courseId}/lecturer/{lecturerId}")
-  public ResponseEntity<Session> addSession(@PathParam("courseId") int courseId,
-                                            @PathParam("lecturerId") int lecturerId,
-                                            CreateSessionRequestDTO createSessionRequestDTO
+  public ResponseEntity<SessionResponseDTO> addSession(@PathParam("courseId") int courseId,
+                                                       @PathParam("lecturerId") int lecturerId,
+                                                       CreateSessionRequestDTO createSessionRequestDTO
   ) {
-    Session createdSession = sessionService.addSession(courseId, lecturerId, createSessionRequestDTO);
+    SessionResponseDTO createdSession = sessionService.addSession(courseId, lecturerId, createSessionRequestDTO);
     return ResponseEntity.created(createdSession);
   }
 
   @PUT
   @Path("/update/{id}")
-  public ResponseEntity<Session> updateSession(@PathParam("id") int id, CreateSessionRequestDTO session) {
-    Optional<Session> updatedSession = sessionService.updateSession(id, session);
+  public ResponseEntity<SessionResponseDTO> updateSession(@PathParam("id") int id, UpdateSessionRequestDTO session) {
+    Optional<SessionResponseDTO> updatedSession = sessionService.updateSession(id, session);
     return updatedSession.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Session not found"));
   }
 }

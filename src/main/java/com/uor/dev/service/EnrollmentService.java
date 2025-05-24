@@ -1,18 +1,19 @@
 package com.uor.dev.service;
 
 import com.uor.dev.entity.Enrollment;
+import com.uor.dev.payload.enrollment.EnrollmentResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface EnrollmentService {
-  List<Enrollment> getAllEnrollments();
+  List<EnrollmentResponseDTO> getAllEnrollments();
 
-  Optional<Enrollment> getEnrollmentById(int id);
+  Optional<EnrollmentResponseDTO> getEnrollmentById(int id);
 
   boolean deleteEnrollment(int id);
 
-  Enrollment addEnrollment(int courseId, int studentId);
+  EnrollmentResponseDTO addEnrollment(int courseId, int studentId);
 
-  List<Enrollment> getEnrollmentsByStudentId(int studentId);
+  List<EnrollmentResponseDTO> getEnrollmentsByStudentId(int studentId);
 }

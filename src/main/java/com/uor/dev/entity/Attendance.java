@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "attendance")
-@IdClass(Attendance.class)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+//@IdClass(AttendanceId.class)
 public class Attendance {
 
   @Id

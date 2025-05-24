@@ -17,4 +17,11 @@ public class StudentResponseDTO {
   private String phoneNumber;
   private String address;
   private String dateOfBirth;
+
+  @Builder(builderMethodName = "basicBuilder")
+  public StudentResponseDTO(String firstName, String email,String phoneNumber) {
+    this.firstName = firstName;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
+  }
 }

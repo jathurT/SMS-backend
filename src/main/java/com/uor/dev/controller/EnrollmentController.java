@@ -1,6 +1,6 @@
 package com.uor.dev.controller;
 
-import com.uor.dev.entity.Enrollment;
+import com.uor.dev.payload.enrollment.EnrollmentResponseDTO;
 import com.uor.dev.service.EnrollmentService;
 import com.uor.dev.util.ResponseEntity;
 import jakarta.inject.Inject;
@@ -19,15 +19,15 @@ public class EnrollmentController {
 
   @GET
   @Path("/all")
-  public ResponseEntity<List<Enrollment>> getAllEnrollments() {
-    List<Enrollment> enrollments = enrollmentService.getAllEnrollments();
+  public ResponseEntity<List<EnrollmentResponseDTO>> getAllEnrollments() {
+    List<EnrollmentResponseDTO> enrollments = enrollmentService.getAllEnrollments();
     return ResponseEntity.ok(enrollments);
   }
 
   @GET
   @Path("/{id}")
-  public ResponseEntity<Enrollment> getEnrollmentById(@PathParam("id") int id) {
-    Optional<Enrollment> enrollment = enrollmentService.getEnrollmentById(id);
+  public ResponseEntity<EnrollmentResponseDTO> getEnrollmentById(@PathParam("id") int id) {
+    Optional<EnrollmentResponseDTO> enrollment = enrollmentService.getEnrollmentById(id);
     return enrollment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Enrollment not found"));
   }
 
@@ -44,15 +44,15 @@ public class EnrollmentController {
 
   @POST
   @Path("/add/course/{courseId}/student/{studentId}")
-  public ResponseEntity<Enrollment> addEnrollment(@PathParam("courseId") int courseId, @PathParam("studentId") int studentId) {
-    Enrollment createdEnrollment = enrollmentService.addEnrollment(courseId, studentId);
+  public ResponseEntity<EnrollmentResponseDTO> addEnrollment(@PathParam("courseId") int courseId, @PathParam("studentId") int studentId) {
+    EnrollmentResponseDTO createdEnrollment = enrollmentService.addEnrollment(courseId, studentId);
     return ResponseEntity.created(createdEnrollment);
   }
 
   @GET
   @Path("/student/{studentId}")
-  public ResponseEntity<List<Enrollment>> getEnrollmentsByStudentId(@PathParam("studentId") int studentId) {
-    List<Enrollment> enrollments = enrollmentService.getEnrollmentsByStudentId(studentId);
+  public ResponseEntity<List<EnrollmentResponseDTO>> getEnrollmentsByStudentId(@PathParam("studentId") int studentId) {
+    List<EnrollmentResponseDTO> enrollments = enrollmentService.getEnrollmentsByStudentId(studentId);
     return ResponseEntity.ok(enrollments);
   }
 
