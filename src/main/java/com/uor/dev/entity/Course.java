@@ -28,6 +28,9 @@ public class Course {
   @Column(name = "course_code", nullable = false, unique = true)
   private String courseCode;
 
+  @Column(name = "enrollment_key", nullable = false, unique = true)
+  private String enrollmentKey;
+
   @Column(name = "credits", nullable = false)
   private Integer credits;
 

@@ -1,11 +1,8 @@
 package com.uor.dev.payload.course;
 
-import com.uor.dev.entity.Department;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 public class CreateCourseRequestDTO {
@@ -23,4 +20,7 @@ public class CreateCourseRequestDTO {
 
   @NotBlank(message = "Department name must be not blank")
   private String departmentName;
+
+  @NotBlank(message = "Enrollment key must be not blank")
+  private String enrollmentKey;
 }

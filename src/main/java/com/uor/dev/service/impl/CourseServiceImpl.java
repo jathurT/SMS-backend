@@ -57,6 +57,7 @@ public class CourseServiceImpl implements CourseService {
               .courseId(course.getCourseId())
               .courseName(course.getCourseName())
               .courseCode(course.getCourseCode())
+              .enrollmentKey(course.getEnrollmentKey())
               .credits(course.getCredits())
               .semester(course.getSemester())
               .departmentName(course.getDepartment().getDepartmentName())
@@ -79,6 +80,7 @@ public class CourseServiceImpl implements CourseService {
             .courseId(course.get().getCourseId())
             .courseName(course.get().getCourseName())
             .courseCode(course.get().getCourseCode())
+            .enrollmentKey(course.get().getEnrollmentKey())
             .credits(course.get().getCredits())
             .semester(course.get().getSemester())
             .departmentName(course.get().getDepartment().getDepartmentName())
@@ -113,6 +115,7 @@ public class CourseServiceImpl implements CourseService {
     Course newCourse = Course.builder()
             .courseName(course.getCourseName())
             .courseCode(course.getCourseCode())
+            .enrollmentKey(course.getEnrollmentKey())
             .credits(course.getCredits())
             .semester(course.getSemester())
             .department(department)
@@ -124,6 +127,7 @@ public class CourseServiceImpl implements CourseService {
             .courseId(newCourse.getCourseId())
             .courseCode(newCourse.getCourseCode())
             .courseName(newCourse.getCourseName())
+            .enrollmentKey(newCourse.getEnrollmentKey())
             .departmentName(newCourse.getDepartment().getDepartmentName())
             .semester(newCourse.getSemester())
             .credits(newCourse.getCredits())
@@ -150,11 +154,17 @@ public class CourseServiceImpl implements CourseService {
       throw new RuntimeException("Course with this name already exists");
     }
 
+    if (courseRepository.findByEnrollmentKey(course.getEnrollmentKey()).isPresent()
+            && !courseToUpdate.getEnrollmentKey().equals(course.getEnrollmentKey())) {
+      throw new RuntimeException("Course with this enrollment key already exists");
+    }
+
     Department department = departmentRepository.findByDepartmentName(course.getDepartmentName())
             .orElseThrow(() -> new RuntimeException("Department with name " + course.getDepartmentName() + " not found"));
 
     courseToUpdate.setCourseName(course.getCourseName());
     courseToUpdate.setCourseCode(course.getCourseCode());
+    courseToUpdate.setEnrollmentKey(course.getEnrollmentKey());
     courseToUpdate.setCredits(course.getCredits());
     courseToUpdate.setSemester(course.getSemester());
     courseToUpdate.setDepartment(department);
@@ -163,6 +173,7 @@ public class CourseServiceImpl implements CourseService {
     return Optional.of(CourseResponseDTO.basicBuilder()
             .courseId(courseToUpdate.getCourseId())
             .courseCode(courseToUpdate.getCourseCode())
+            .enrollmentKey(courseToUpdate.getEnrollmentKey())
             .courseName(courseToUpdate.getCourseName())
             .departmentName(courseToUpdate.getDepartment().getDepartmentName())
             .semester(courseToUpdate.getSemester())

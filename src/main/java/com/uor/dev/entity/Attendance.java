@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-//@IdClass(AttendanceId.class)
+@IdClass(AttendanceId.class)
 public class Attendance {
 
   @Id

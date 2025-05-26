@@ -13,6 +13,7 @@ public class CourseResponseDTO {
   private Integer courseId;
   private String courseName;
   private String courseCode;
+  private String enrollmentKey;
   private String semester;
   private Integer credits;
   private String departmentName;
@@ -22,10 +23,11 @@ public class CourseResponseDTO {
 
   @Builder(builderMethodName = "basicBuilder")
   public CourseResponseDTO(Integer courseId, String courseName, String courseCode, String semester,
-                           Integer credits, String departmentName, String createdAt) {
+                           Integer credits, String departmentName, String createdAt, String enrollmentKey) {
     this.courseId = courseId;
     this.courseName = courseName;
     this.courseCode = courseCode;
+    this.enrollmentKey = enrollmentKey;
     this.semester = semester;
     this.credits = credits;
     this.departmentName = departmentName;
@@ -35,10 +37,11 @@ public class CourseResponseDTO {
   @Builder(builderMethodName = "fullBuilder")
   public CourseResponseDTO(Integer courseId, String courseName, String courseCode, String semester,
                            Integer credits, String departmentName, List<LecturerResponseDTO> lecturers,
-                           Integer totalStudentsEnrolled, String createdAt) {
+                           Integer totalStudentsEnrolled, String createdAt, String enrollmentKey) {
     this.courseId = courseId;
     this.courseName = courseName;
     this.courseCode = courseCode;
+    this.enrollmentKey = enrollmentKey;
     this.semester = semester;
     this.credits = credits;
     this.departmentName = departmentName;

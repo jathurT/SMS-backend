@@ -21,4 +21,8 @@ public class CourseRepository implements PanacheRepository<Course> {
   public Optional<Course> findByCourseCode(@NotBlank(message = "Course code must be not blank") String courseCode) {
     return find("courseCode", courseCode).firstResultOptional();
   }
+
+  public Optional<Object> findByEnrollmentKey(@NotBlank(message = "Enrollment key must be not blank") String enrollmentKey) {
+    return find("enrollmentKey", enrollmentKey).firstResultOptional();
+  }
 }

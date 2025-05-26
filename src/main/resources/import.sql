@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS courses
     course_id     SERIAL PRIMARY KEY,
     course_name   VARCHAR(255) NOT NULL,
     course_code   VARCHAR(20)  NOT NULL UNIQUE,
+    enrollment_key VARCHAR(50) NOT NULL UNIQUE,
     credits       INT          NOT NULL,
     semester      VARCHAR(20)  NOT NULL,
     created_at    DATE         NOT NULL,
