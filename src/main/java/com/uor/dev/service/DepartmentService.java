@@ -1,6 +1,7 @@
 package com.uor.dev.service;
 
 import com.uor.dev.payload.department.CreateDepartmentRequestDTO;
+import com.uor.dev.payload.department.DepartmentAnalyticResponseDTO;
 import com.uor.dev.payload.department.DepartmentResponseDTO;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface DepartmentService {
   Optional<DepartmentResponseDTO> updateDepartment(int id, CreateDepartmentRequestDTO department);
 
   boolean deleteDepartment(int id);
+
+  List<DepartmentAnalyticResponseDTO> getDepartmentAnalytics();
 }

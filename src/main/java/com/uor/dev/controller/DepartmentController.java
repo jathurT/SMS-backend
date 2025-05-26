@@ -1,6 +1,7 @@
 package com.uor.dev.controller;
 
 import com.uor.dev.payload.department.CreateDepartmentRequestDTO;
+import com.uor.dev.payload.department.DepartmentAnalyticResponseDTO;
 import com.uor.dev.payload.department.DepartmentResponseDTO;
 import com.uor.dev.service.DepartmentService;
 import com.uor.dev.util.ResponseEntity;
@@ -59,5 +60,10 @@ public class DepartmentController {
     }
   }
 
-
+  @GET
+  @Path("/analytics")
+  public ResponseEntity<List<DepartmentAnalyticResponseDTO>> getDepartmentAnalytics() {
+    List<DepartmentAnalyticResponseDTO> analytics = departmentService.getDepartmentAnalytics();
+    return ResponseEntity.ok(analytics);
+  }
 }

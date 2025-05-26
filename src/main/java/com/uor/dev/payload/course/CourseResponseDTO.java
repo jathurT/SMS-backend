@@ -1,5 +1,6 @@
 package com.uor.dev.payload.course;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.uor.dev.payload.lecturer.LecturerResponseDTO;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +10,9 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CourseResponseDTO {
+
   private Integer courseId;
   private String courseName;
   private String courseCode;
@@ -50,4 +53,11 @@ public class CourseResponseDTO {
     this.totalStudentsEnrolled = totalStudentsEnrolled;
   }
 
+  @Builder(builderMethodName = "partialBuilder")
+  public CourseResponseDTO(Integer courseId, String courseName, String courseCode, String semester) {
+    this.courseId = courseId;
+    this.courseName = courseName;
+    this.courseCode = courseCode;
+    this.semester = semester;
+  }
 }

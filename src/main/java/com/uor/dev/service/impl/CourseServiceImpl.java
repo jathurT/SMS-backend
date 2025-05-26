@@ -112,6 +112,11 @@ public class CourseServiceImpl implements CourseService {
     if (courseRepository.findByCourseName(course.getCourseName()).isPresent()) {
       throw new RuntimeException("Course with this name already exists");
     }
+
+    if (courseRepository.findByEnrollmentKey(course.getEnrollmentKey()).isPresent()) {
+      throw new RuntimeException("Course with this enrollment key already exists");
+    }
+
     Course newCourse = Course.builder()
             .courseName(course.getCourseName())
             .courseCode(course.getCourseCode())

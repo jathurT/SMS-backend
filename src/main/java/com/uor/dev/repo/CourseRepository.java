@@ -5,6 +5,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -22,7 +23,21 @@ public class CourseRepository implements PanacheRepository<Course> {
     return find("courseCode", courseCode).firstResultOptional();
   }
 
-  public Optional<Object> findByEnrollmentKey(@NotBlank(message = "Enrollment key must be not blank") String enrollmentKey) {
+  public Optional<Course> findByEnrollmentKey(@NotBlank(message = "Enrollment key must be not blank") String enrollmentKey) {
     return find("enrollmentKey", enrollmentKey).firstResultOptional();
+  }
+
+  public Integer countByDepartmentId(Integer departmentId) {
+    if (departmentId == null) {
+      return 0;
+    }
+    return (int) count("department.departmentId", departmentId);
+  }
+
+  public Collection<Course> findByDepartmentId(Integer departmentId) {
+    if (departmentId == null) {
+      return null;
+    }
+    return find("department.departmentId", departmentId).list();
   }
 }
