@@ -40,4 +40,11 @@ public class CourseRepository implements PanacheRepository<Course> {
     }
     return find("department.departmentId", departmentId).list();
   }
+
+  public Collection<Course> findByLecturerId(int id) {
+    if (id <= 0) {
+      return null;
+    }
+    return find("select c from Course c join c.lecturers l where l.lecturerId = ?1", id).list();
+  }
 }

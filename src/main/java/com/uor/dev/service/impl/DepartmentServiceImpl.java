@@ -84,7 +84,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     Department departmentToUpdate = existingDepartment.get();
 
     if (departmentRepository.findByDepartmentName(department.getDepartmentName()).isPresent() &&
-        departmentToUpdate.getDepartmentName().equals(department.getDepartmentName())) {
+        !departmentToUpdate.getDepartmentName().equals(department.getDepartmentName())) {
       throw new RuntimeException("Department with this name already exists");
     }
 
@@ -148,5 +148,43 @@ public class DepartmentServiceImpl implements DepartmentService {
       response.add(analyticDTO);
     }
     return response;
+  }
+
+  @Override
+  public Optional<DepartmentAnalyticResponseDTO> getDepartmentAnalyticsById(int id) {
+    Optional<Department> department = departmentRepository.findByDepartmentId(id);
+    if (department.isEmpty()) {
+      throw new RuntimeException("Department not found");
+    }
+
+    List<LecturerResponseDTO> lecturers = lecturerRepository.findByDepartmentId(department.get().getDepartmentId())
+        .stream()
+        .map(lecturer -> LecturerResponseDTO.partialBuilder()
+            .firstName(lecturer.getFirstName())
+            .lastName(lecturer.getLastName())
+            .email(lecturer.getEmail())
+            .build())
+        .toList();
+
+    List<CourseResponseDTO> courses = courseRepository.findByDepartmentId(department.get().getDepartmentId())
+        .stream()
+        .map(course -> CourseResponseDTO.partialBuilder()
+            .courseId(course.getCourseId())
+            .courseName(course.getCourseName())
+            .courseCode(course.getCourseCode())
+            .semester(course.getSemester())
+            .build())
+        .toList();
+
+    DepartmentAnalyticResponseDTO analyticDTO = DepartmentAnalyticResponseDTO.builder()
+        .departmentId(department.get().getDepartmentId())
+        .departmentName(department.get().getDepartmentName())
+        .totalCourses(courseRepository.countByDepartmentId(department.get().getDepartmentId()))
+        .totalLecturers(lecturerRepository.countByDepartmentId(department.get().getDepartmentId()))
+        .lecturers(lecturers)
+        .courses(courses)
+        .build();
+
+    return Optional.of(analyticDTO);
   }
 }

@@ -1,6 +1,7 @@
 package com.uor.dev.controller;
 
 import com.uor.dev.payload.lecturer.CreateLecturerRequestDTO;
+import com.uor.dev.payload.lecturer.LectureCourseResponseDTO;
 import com.uor.dev.payload.lecturer.LecturerResponseDTO;
 import com.uor.dev.payload.lecturer.UpdateLecturerRequestDTO;
 import com.uor.dev.service.LectureService;
@@ -58,6 +59,13 @@ public class LecturerController {
     } else {
       return ResponseEntity.notFound("Lecturer not found");
     }
+  }
+
+  @GET
+  @Path("/details/{id}")
+  public ResponseEntity<LectureCourseResponseDTO> getLecturerDetails(@PathParam("id") int id) {
+    Optional<LectureCourseResponseDTO> lecturerDetails = lectureService.getLecturerDetails(id);
+    return lecturerDetails.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Lecturer details not found"));
   }
 
 }

@@ -58,4 +58,11 @@ public class CourseController {
     Optional<CourseResponseDTO> updatedCourse = courseService.updateCourse(id, course);
     return updatedCourse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Course not found"));
   }
+
+  @POST
+  @Path("/add-lecturer/{courseId}/{lecturerId}")
+  public ResponseEntity<CourseResponseDTO> addLecturerToCourse(@PathParam("courseId") int courseId, @PathParam("lecturerId") int lecturerId) {
+    Optional<CourseResponseDTO> updatedCourse = courseService.addLecturerToCourse(courseId, lecturerId);
+    return updatedCourse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Course or Lecturer not found"));
+  }
 }

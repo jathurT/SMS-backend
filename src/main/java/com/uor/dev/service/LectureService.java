@@ -1,6 +1,7 @@
 package com.uor.dev.service;
 
 import com.uor.dev.payload.lecturer.CreateLecturerRequestDTO;
+import com.uor.dev.payload.lecturer.LectureCourseResponseDTO;
 import com.uor.dev.payload.lecturer.LecturerResponseDTO;
 import com.uor.dev.payload.lecturer.UpdateLecturerRequestDTO;
 
@@ -18,4 +19,6 @@ public interface LectureService {
   Optional<LecturerResponseDTO> updateLecturer(int id, UpdateLecturerRequestDTO lecturer);
 
   boolean deleteLecturer(int id);
+
+  Optional<LectureCourseResponseDTO> getLecturerDetails(int id);
 }

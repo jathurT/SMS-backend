@@ -17,4 +17,6 @@ public interface CourseService {
   CourseResponseDTO addCourse(@Valid CreateCourseRequestDTO course);
 
   Optional<CourseResponseDTO> updateCourse(int id, @Valid CreateCourseRequestDTO course);
+
+  Optional<CourseResponseDTO> addLecturerToCourse(int courseId, int lecturerId);
 }

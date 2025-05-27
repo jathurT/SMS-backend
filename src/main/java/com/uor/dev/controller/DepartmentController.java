@@ -66,4 +66,11 @@ public class DepartmentController {
     List<DepartmentAnalyticResponseDTO> analytics = departmentService.getDepartmentAnalytics();
     return ResponseEntity.ok(analytics);
   }
+
+  @GET
+  @Path("/analytics/{id}")
+  public ResponseEntity<DepartmentAnalyticResponseDTO> getDepartmentAnalyticsById(@PathParam("id") int id) {
+    Optional<DepartmentAnalyticResponseDTO> analytics = departmentService.getDepartmentAnalyticsById(id);
+    return analytics.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Department analytics not found"));
+  }
 }

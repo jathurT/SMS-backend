@@ -19,4 +19,6 @@ public interface DepartmentService {
   boolean deleteDepartment(int id);
 
   List<DepartmentAnalyticResponseDTO> getDepartmentAnalytics();
+
+  Optional<DepartmentAnalyticResponseDTO> getDepartmentAnalyticsById(int id);
 }
