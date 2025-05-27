@@ -6,6 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -46,5 +47,13 @@ public class CourseRepository implements PanacheRepository<Course> {
       return null;
     }
     return find("select c from Course c join c.lecturers l where l.lecturerId = ?1", id).list();
+  }
+
+
+  public List<Course> findCoursesByStudentId(int id) {
+    if (id <= 0) {
+      return List.of();
+    }
+    return find("select c from Course c join c.enrollments e where e.student.studentId = ?1", id).list();
   }
 }
