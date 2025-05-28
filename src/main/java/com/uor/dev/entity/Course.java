@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +27,9 @@ public class Course {
 
   @Column(name = "course_code", nullable = false, unique = true)
   private String courseCode;
+
+  @Column(name = "enrollment_key", nullable = false, unique = true)
+  private String enrollmentKey;
 
   @Column(name = "credits", nullable = false)
   private Integer credits;

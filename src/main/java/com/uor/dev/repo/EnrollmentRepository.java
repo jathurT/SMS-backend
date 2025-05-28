@@ -5,11 +5,13 @@ import com.uor.dev.entity.Student;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class EnrollmentRepository implements PanacheRepository<Enrollment> {
+
   public Optional<Enrollment> findByEnrollmentId(int id) {
     return find("enrollmentId", id).firstResultOptional();
   }
@@ -24,5 +26,9 @@ public class EnrollmentRepository implements PanacheRepository<Enrollment> {
 
   public List<Enrollment> findByStudent(Student student) {
     return find("student", student).list();
+  }
+
+  public Collection<Enrollment> findByCourseId(Integer courseId) {
+    return find("course.courseId", courseId).list();
   }
 }

@@ -1,5 +1,6 @@
 package com.uor.dev.controller;
 
+import com.uor.dev.payload.course.CourseAnalyticResponseDTO;
 import com.uor.dev.payload.course.CourseResponseDTO;
 import com.uor.dev.payload.course.CreateCourseRequestDTO;
 import com.uor.dev.service.CourseService;
@@ -57,5 +58,26 @@ public class CourseController {
   public ResponseEntity<CourseResponseDTO> updateCourse(@PathParam("id") int id, @Valid CreateCourseRequestDTO course) {
     Optional<CourseResponseDTO> updatedCourse = courseService.updateCourse(id, course);
     return updatedCourse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Course not found"));
+  }
+
+  @POST
+  @Path("/add-lecturer/{courseId}/{lecturerId}")
+  public ResponseEntity<CourseResponseDTO> addLecturerToCourse(@PathParam("courseId") int courseId, @PathParam("lecturerId") int lecturerId) {
+    Optional<CourseResponseDTO> updatedCourse = courseService.addLecturerToCourse(courseId, lecturerId);
+    return updatedCourse.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Course or Lecturer not found"));
+  }
+
+  @GET
+  @Path("/details/{id}")
+  public ResponseEntity<CourseAnalyticResponseDTO> getCourseDetails(@PathParam("id") int id) {
+    Optional<CourseAnalyticResponseDTO> course = courseService.getCourseDetailsById(id);
+    return course.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Course not found"));
+  }
+
+  @GET
+  @Path("/analytics")
+  public ResponseEntity<List<CourseAnalyticResponseDTO>> getCourseAnalytics() {
+    List<CourseAnalyticResponseDTO> analytics = courseService.getCourseAnalytics();
+    return ResponseEntity.ok(analytics);
   }
 }

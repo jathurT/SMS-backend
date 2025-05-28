@@ -1,6 +1,8 @@
 package com.uor.dev.payload.session;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.uor.dev.payload.student.StudentResponseDTO;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,13 +11,17 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SessionResponseDTO {
+
   private Integer sessionId;
-  private String Date;
+  private String date;
   private String startTime;
   private String endTime;
   private String courseName;
-  private String CourseCode;
+  private String courseCode;
   private String lecturerName;
   private List<StudentResponseDTO> studentsAttended;
 
@@ -23,25 +29,21 @@ public class SessionResponseDTO {
   public SessionResponseDTO(Integer sessionId, String date, String startTime, String endTime,
                             String courseName, String courseCode, String lecturerName) {
     this.sessionId = sessionId;
-    this.Date = date;
+    this.date = date;
     this.startTime = startTime;
     this.endTime = endTime;
     this.courseName = courseName;
-    this.CourseCode = courseCode;
+    this.courseCode = courseCode;
     this.lecturerName = lecturerName;
   }
 
-  @Builder(builderMethodName = "fullBuilder")
+  @Builder(builderMethodName = "partialBuilder")
   public SessionResponseDTO(Integer sessionId, String date, String startTime, String endTime,
-                            String courseName, String courseCode, String lecturerName,
-                            List<StudentResponseDTO> studentsAttended) {
+                            String lecturerName) {
     this.sessionId = sessionId;
-    this.Date = date;
+    this.date = date;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.courseName = courseName;
-    this.CourseCode = courseCode;
     this.lecturerName = lecturerName;
-    this.studentsAttended = studentsAttended;
   }
 }
