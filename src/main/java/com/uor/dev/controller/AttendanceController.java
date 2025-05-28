@@ -1,11 +1,13 @@
 package com.uor.dev.controller;
 
 import com.uor.dev.payload.attendance.AttendanceResponseDTO;
+import com.uor.dev.payload.student.StudentResponseDTO;
 import com.uor.dev.service.AttendanceService;
 import com.uor.dev.util.ResponseEntity;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import java.util.List;
 
@@ -39,9 +41,9 @@ public class AttendanceController {
   }
 
   @POST
-  @Path("/add/session/{sessionId}/student/{studentId}")
+  @Path("/add/session/{sessionId}")
   public ResponseEntity<AttendanceResponseDTO> addAttendance(@PathParam("sessionId") int sessionId,
-                                                             @PathParam("studentId") int studentId) {
+                                                             @RequestBody int studentId) {
     AttendanceResponseDTO createdAttendance = attendanceService.addAttendance(sessionId, studentId);
     return ResponseEntity.created(createdAttendance);
   }
@@ -56,5 +58,12 @@ public class AttendanceController {
     } else {
       return ResponseEntity.notFound("Attendance not found");
     }
+  }
+
+  @GET
+  @Path("/non-attending-students/session/{sessionId}")
+  public ResponseEntity<List<StudentResponseDTO>> getNonAttendingStudents(@PathParam("sessionId") int sessionId) {
+    List<StudentResponseDTO> nonAttendingStudents = attendanceService.getNonAttendingStudents(sessionId);
+    return ResponseEntity.ok(nonAttendingStudents);
   }
 }

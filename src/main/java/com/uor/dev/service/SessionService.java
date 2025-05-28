@@ -17,4 +17,6 @@ public interface SessionService {
   SessionResponseDTO addSession(int courseId, int lecturerId, CreateSessionRequestDTO createSessionRequestDTO);
 
   Optional<SessionResponseDTO> updateSession(int id, UpdateSessionRequestDTO session);
+
+  List<SessionResponseDTO> getSessionsByCourseId(int courseId);
 }

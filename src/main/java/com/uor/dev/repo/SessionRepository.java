@@ -19,4 +19,11 @@ public class SessionRepository implements PanacheRepository<Session> {
     }
     return find("select s from Session s join s.students st where st.studentId = ?1", id).list();
   }
+
+  public List<Session> findByCourseId(int courseId) {
+    if (courseId <= 0) {
+      return List.of();
+    }
+    return find("select s from Session s where s.course.courseId = ?1", courseId).list();
+  }
 }

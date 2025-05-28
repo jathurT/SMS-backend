@@ -1,6 +1,7 @@
 package com.uor.dev.service;
 
 import com.uor.dev.payload.attendance.AttendanceResponseDTO;
+import com.uor.dev.payload.student.StudentResponseDTO;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface AttendanceService {
   AttendanceResponseDTO addAttendance(int sessionId, int studentId);
 
   boolean deleteAttendance(int sessionId, int studentId);
+
+  List<StudentResponseDTO> getNonAttendingStudents(int sessionId);
 }

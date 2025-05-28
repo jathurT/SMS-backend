@@ -11,18 +11,18 @@ import java.util.Optional;
 public class AttendanceRepository implements PanacheRepository<Attendance> {
 
   public List<Attendance> findBySessionId(int sessionId) {
-    return find("session.sessionId", sessionId).list();
+    return find("sessionId", sessionId).list();
   }
 
   public List<Attendance> findByStudentId(int studentId) {
-    return find("student.studentId", studentId).list();
+    return find("studentId", studentId).list();
   }
 
   public Optional<Attendance> findBySessionIdAndStudentId(int sessionId, int studentId) {
-    return find("session.sessionId = ?1 and student.studentId = ?2", sessionId, studentId).firstResultOptional();
+    return find("sessionId = ?1 and studentId = ?2", sessionId, studentId).firstResultOptional();
   }
 
   public boolean existsBySessionIdAndStudentId(int sessionId, int studentId) {
-    return findBySessionIdAndStudentId(sessionId, studentId).isPresent();
+    return find("sessionId = ?1 and studentId = ?2", sessionId, studentId).count() > 0;
   }
 }

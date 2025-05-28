@@ -160,4 +160,24 @@ public class SessionServiceImpl implements SessionService {
 
     return Optional.of(response);
   }
+
+  @Override
+  public List<SessionResponseDTO> getSessionsByCourseId(int courseId) {
+    if (courseRepository.findByCourseId(courseId).isEmpty()) {
+      throw new RuntimeException("Course not found");
+    }
+    List<Session> sessions = sessionRepository.findByCourseId(courseId);
+    if (sessions.isEmpty()) {
+      throw new RuntimeException("No sessions found for course ID: " + courseId);
+    }
+    return sessions.stream().map(session -> SessionResponseDTO.basicBuilder()
+            .sessionId(session.getSessionId())
+            .courseName(session.getCourse().getCourseName())
+            .courseCode(session.getCourse().getCourseCode())
+            .lecturerName(session.getLecturer().getFirstName() + " " + session.getLecturer().getLastName())
+            .date(String.valueOf(session.getDate()))
+            .startTime(String.valueOf(session.getStartTime()))
+            .endTime(String.valueOf(session.getEndTime()))
+            .build()).toList();
+  }
 }

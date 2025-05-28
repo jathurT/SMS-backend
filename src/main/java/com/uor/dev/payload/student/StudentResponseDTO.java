@@ -26,4 +26,12 @@ public class StudentResponseDTO {
     this.email = email;
     this.phoneNumber = phoneNumber;
   }
+
+  @Builder(builderMethodName = "partialBuilder")
+  public StudentResponseDTO(Integer studentId,String firstName, String email, String phoneNumber) {
+    this.studentId = studentId;
+    this.firstName = firstName;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
+  }
 }

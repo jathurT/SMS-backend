@@ -61,4 +61,11 @@ public class SessionController {
     Optional<SessionResponseDTO> updatedSession = sessionService.updateSession(id, session);
     return updatedSession.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound("Session not found"));
   }
+
+  @GET
+  @Path("/course/{courseId}")
+  public ResponseEntity<List<SessionResponseDTO>> getSessionsByCourseId(@PathParam("courseId") int courseId) {
+    List<SessionResponseDTO> sessions = sessionService.getSessionsByCourseId(courseId);
+    return ResponseEntity.ok(sessions);
+  }
 }
