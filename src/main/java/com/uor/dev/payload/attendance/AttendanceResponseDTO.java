@@ -1,5 +1,6 @@
 package com.uor.dev.payload.attendance;
 
+import com.uor.dev.entity.Attendance;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +19,14 @@ public class AttendanceResponseDTO {
   private String date;
   private String startTime;
   private String endTime;
+
+  @Builder(builderMethodName = "basicBuilder")
+  public AttendanceResponseDTO(String studentName, String sessionName, String lecturerName, String date, String startTime, String endTime) {
+    this.studentName = studentName;
+    this.sessionName = sessionName;
+    this.lecturerName = lecturerName;
+    this.date = date;
+    this.startTime = startTime;
+    this.endTime = endTime;
+  }
 }

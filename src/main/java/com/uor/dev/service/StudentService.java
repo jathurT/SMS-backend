@@ -1,6 +1,7 @@
 package com.uor.dev.service;
 
 import com.uor.dev.payload.student.CreateStudentRequestDTO;
+import com.uor.dev.payload.student.StudentAnalyticResponseDTO;
 import com.uor.dev.payload.student.StudentResponseDTO;
 import com.uor.dev.payload.student.UpdateStudentRequestDTO;
 
@@ -20,4 +21,8 @@ public interface StudentService {
   boolean deleteStudent(int id);
 
   Optional<StudentResponseDTO> getStudentByEmail(String email);
+
+  Optional<StudentAnalyticResponseDTO> getStudentDetails(int id);
+
+  List<StudentAnalyticResponseDTO> getAllStudentAnalytics();
 }

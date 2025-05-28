@@ -45,7 +45,7 @@ public class SessionServiceImpl implements SessionService {
                       .build())
               .toList();
 
-      return SessionResponseDTO.fullBuilder()
+      return SessionResponseDTO.builder()
               .sessionId(session.getSessionId())
               .courseName(session.getCourse().getCourseName())
               .courseCode(session.getCourse().getCourseCode())

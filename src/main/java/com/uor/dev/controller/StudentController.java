@@ -2,6 +2,7 @@ package com.uor.dev.controller;
 
 
 import com.uor.dev.payload.student.CreateStudentRequestDTO;
+import com.uor.dev.payload.student.StudentAnalyticResponseDTO;
 import com.uor.dev.payload.student.StudentResponseDTO;
 import com.uor.dev.payload.student.UpdateStudentRequestDTO;
 import com.uor.dev.service.StudentService;
@@ -66,5 +67,19 @@ public class StudentController {
   public ResponseEntity<StudentResponseDTO> getStudentByEmail(@PathParam("email") String email) {
     Optional<StudentResponseDTO> student = studentService.getStudentByEmail(email);
     return student.map(ResponseEntity::ok).orElse(ResponseEntity.notFound("Student not found"));
+  }
+
+  @GET
+  @Path("/details/{id}")
+  public ResponseEntity<StudentAnalyticResponseDTO> getStudentDetails(@PathParam("id") int id) {
+    Optional<StudentAnalyticResponseDTO> studentDetails = studentService.getStudentDetails(id);
+    return studentDetails.map(ResponseEntity::ok).orElse(ResponseEntity.notFound("Student details not found"));
+  }
+
+  @GET
+  @Path("/analytics")
+  public ResponseEntity<List<StudentAnalyticResponseDTO>> getAllStudentAnalytics() {
+    List<StudentAnalyticResponseDTO> studentAnalytics = studentService.getAllStudentAnalytics();
+    return ResponseEntity.ok(studentAnalytics);
   }
 }
