@@ -35,7 +35,7 @@ public class CourseRepository implements PanacheRepository<Course> {
     return (int) count("department.departmentId", departmentId);
   }
 
-  public Collection<Course> findByDepartmentId(Integer departmentId) {
+  public List<Course> findByDepartmentId(Integer departmentId) {
     if (departmentId == null) {
       return null;
     }

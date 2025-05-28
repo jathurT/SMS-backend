@@ -80,4 +80,12 @@ public class CourseController {
     List<CourseAnalyticResponseDTO> analytics = courseService.getCourseAnalytics();
     return ResponseEntity.ok(analytics);
   }
+
+  @GET
+  @Path("/department/{departmentId}")
+  public ResponseEntity<List<CourseResponseDTO>> getCoursesByDepartmentId(@PathParam("departmentId") int departmentId) {
+    List<CourseResponseDTO> courses = courseService.getCoursesByDepartmentId(departmentId);
+    return ResponseEntity.ok(courses);
+
+  }
 }

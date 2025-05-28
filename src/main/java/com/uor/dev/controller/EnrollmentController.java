@@ -1,9 +1,11 @@
 package com.uor.dev.controller;
 
+import com.uor.dev.payload.enrollment.CreateEnrollmentRequestDTO;
 import com.uor.dev.payload.enrollment.EnrollmentResponseDTO;
 import com.uor.dev.service.EnrollmentService;
 import com.uor.dev.util.ResponseEntity;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
@@ -14,6 +16,7 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EnrollmentController {
+
   @Inject
   EnrollmentService enrollmentService;
 
@@ -42,13 +45,6 @@ public class EnrollmentController {
     }
   }
 
-  @POST
-  @Path("/add/course/{courseId}/student/{studentId}")
-  public ResponseEntity<EnrollmentResponseDTO> addEnrollment(@PathParam("courseId") int courseId, @PathParam("studentId") int studentId) {
-    EnrollmentResponseDTO createdEnrollment = enrollmentService.addEnrollment(courseId, studentId);
-    return ResponseEntity.created(createdEnrollment);
-  }
-
   @GET
   @Path("/student/{studentId}")
   public ResponseEntity<List<EnrollmentResponseDTO>> getEnrollmentsByStudentId(@PathParam("studentId") int studentId) {
@@ -56,4 +52,20 @@ public class EnrollmentController {
     return ResponseEntity.ok(enrollments);
   }
 
+  @POST
+  @Path("/{courseID}")
+  public ResponseEntity<EnrollmentResponseDTO> addEnrollment(
+      @PathParam("courseID") int courseId,
+      @Valid CreateEnrollmentRequestDTO enrollmentRequest
+  ) {
+    EnrollmentResponseDTO createdEnrollment = enrollmentService.addEnrollment(enrollmentRequest, courseId);
+    return ResponseEntity.created(createdEnrollment);
+  }
+
+  @GET
+  @Path("/course/{courseId}")
+  public ResponseEntity<List<EnrollmentResponseDTO>> getEnrollmentsByCourseId(@PathParam("courseId") int courseId) {
+    List<EnrollmentResponseDTO> enrollments = enrollmentService.getEnrollmentsByCourseId(courseId);
+    return ResponseEntity.ok(enrollments);
+  }
 }

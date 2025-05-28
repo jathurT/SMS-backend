@@ -24,4 +24,6 @@ public interface CourseService {
   Optional<CourseAnalyticResponseDTO> getCourseDetailsById(int id);
 
   List<CourseAnalyticResponseDTO> getCourseAnalytics();
+
+  List<CourseResponseDTO> getCoursesByDepartmentId(int departmentId);
 }

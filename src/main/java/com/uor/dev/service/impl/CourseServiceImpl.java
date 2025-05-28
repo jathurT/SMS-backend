@@ -335,4 +335,23 @@ public class CourseServiceImpl implements CourseService {
     }
     return response;
   }
+
+  @Override
+  public List<CourseResponseDTO> getCoursesByDepartmentId(int departmentId) {
+    List<Course> courses = courseRepository.findByDepartmentId(departmentId);
+    if (courses.isEmpty()) {
+      throw new RuntimeException("No courses found for department with ID " + departmentId);
+    }
+    List<CourseResponseDTO> response = new ArrayList<>();
+    for (Course course : courses) {
+      CourseResponseDTO dto = CourseResponseDTO.partialBuilder()
+          .courseId(course.getCourseId())
+          .courseName(course.getCourseName())
+          .courseCode(course.getCourseCode())
+          .semester(course.getSemester())
+          .build();
+      response.add(dto);
+    }
+    return response;
+  }
 }
