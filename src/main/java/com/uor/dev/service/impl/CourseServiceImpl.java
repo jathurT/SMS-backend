@@ -3,9 +3,12 @@ package com.uor.dev.service.impl;
 import com.uor.dev.entity.Course;
 import com.uor.dev.entity.Department;
 import com.uor.dev.entity.Lecturer;
+import com.uor.dev.payload.course.CourseAnalyticResponseDTO;
 import com.uor.dev.payload.course.CourseResponseDTO;
 import com.uor.dev.payload.course.CreateCourseRequestDTO;
 import com.uor.dev.payload.lecturer.LecturerResponseDTO;
+import com.uor.dev.payload.session.SessionResponseDTO;
+import com.uor.dev.payload.student.StudentResponseDTO;
 import com.uor.dev.repo.*;
 import com.uor.dev.service.CourseService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -225,5 +228,111 @@ public class CourseServiceImpl implements CourseService {
             .toList())
         .totalStudentsEnrolled(enrollmentRepository.countByCourseId(course.get().getCourseId()))
         .build());
+  }
+
+  @Override
+  public Optional<CourseAnalyticResponseDTO> getCourseDetailsById(int id) {
+    Optional<Course> course = courseRepository.findByCourseId(id);
+    if (course.isEmpty()) {
+      throw new RuntimeException("Course not found");
+    }
+
+    List<LecturerResponseDTO> lecturers = course.get().getLecturers().stream()
+        .map(lecturer -> LecturerResponseDTO.partialBuilder()
+            .firstName(lecturer.getFirstName())
+            .lastName(lecturer.getLastName())
+            .email(lecturer.getEmail())
+            .build())
+        .toList();
+
+    List<SessionResponseDTO> sessions = course.get().getSessions().stream()
+        .map(session -> SessionResponseDTO.partialBuilder()
+            .sessionId(session.getSessionId())
+            .date(String.valueOf(session.getDate()))
+            .startTime(String.valueOf(session.getStartTime()))
+            .endTime(String.valueOf(session.getEndTime()))
+            .lecturerName(session.getLecturer().getFirstName() + " " + session.getLecturer().getLastName())
+            .build())
+        .toList();
+
+    List<StudentResponseDTO> enrolledStudents = enrollmentRepository.findByCourseId(course.get().getCourseId()).stream()
+        .map(enrollment -> StudentResponseDTO.basicBuilder()
+            .firstName(enrollment.getStudent().getFirstName())
+            .email(enrollment.getStudent().getEmail())
+            .phoneNumber(enrollment.getStudent().getPhoneNumber())
+            .build())
+        .toList();
+
+    CourseAnalyticResponseDTO analyticDTO = CourseAnalyticResponseDTO.builder()
+        .courseId(course.get().getCourseId())
+        .courseName(course.get().getCourseName())
+        .courseCode(course.get().getCourseCode())
+        .enrollmentKey(course.get().getEnrollmentKey())
+        .credits(course.get().getCredits())
+        .semester(course.get().getSemester())
+        .departmentName(course.get().getDepartment().getDepartmentName())
+        .createdAt(String.valueOf(course.get().getCreatedAt()))
+        .totalStudentsEnrolled(enrollmentRepository.countByCourseId(course.get().getCourseId()))
+        .lecturers(lecturers)
+        .conductedSessions(sessions)
+        .enrolledStudents(enrolledStudents)
+        .totalSessionsConducted(course.get().getSessions().size())
+        .build();
+
+    return Optional.of(analyticDTO);
+  }
+
+  @Override
+  public List<CourseAnalyticResponseDTO> getCourseAnalytics() {
+    List<Course> courses = courseRepository.listAll();
+    if (courses.isEmpty()) {
+      throw new RuntimeException("No courses found");
+    }
+    List<CourseAnalyticResponseDTO> response = new ArrayList<>();
+    for (Course course : courses) {
+      List<LecturerResponseDTO> lecturers = course.getLecturers().stream()
+          .map(lecturer -> LecturerResponseDTO.partialBuilder()
+              .firstName(lecturer.getFirstName())
+              .lastName(lecturer.getLastName())
+              .email(lecturer.getEmail())
+              .build())
+          .toList();
+
+      List<SessionResponseDTO> sessions = course.getSessions().stream()
+          .map(session -> SessionResponseDTO.partialBuilder()
+              .sessionId(session.getSessionId())
+              .date(String.valueOf(session.getDate()))
+              .startTime(String.valueOf(session.getStartTime()))
+              .endTime(String.valueOf(session.getEndTime()))
+              .lecturerName(session.getLecturer().getFirstName() + " " + session.getLecturer().getLastName())
+              .build())
+          .toList();
+
+      List<StudentResponseDTO> enrolledStudents = enrollmentRepository.findByCourseId(course.getCourseId()).stream()
+          .map(enrollment -> StudentResponseDTO.basicBuilder()
+              .firstName(enrollment.getStudent().getFirstName())
+              .email(enrollment.getStudent().getEmail())
+              .phoneNumber(enrollment.getStudent().getPhoneNumber())
+              .build())
+          .toList();
+
+      CourseAnalyticResponseDTO analyticDTO = CourseAnalyticResponseDTO.builder()
+          .courseId(course.getCourseId())
+          .courseName(course.getCourseName())
+          .courseCode(course.getCourseCode())
+          .enrollmentKey(course.getEnrollmentKey())
+          .credits(course.getCredits())
+          .semester(course.getSemester())
+          .departmentName(course.getDepartment().getDepartmentName())
+          .createdAt(String.valueOf(course.getCreatedAt()))
+          .totalStudentsEnrolled(enrollmentRepository.countByCourseId(course.getCourseId()))
+          .lecturers(lecturers)
+          .conductedSessions(sessions)
+          .enrolledStudents(enrolledStudents)
+          .totalSessionsConducted(course.getSessions().size())
+          .build();
+      response.add(analyticDTO);
+    }
+    return response;
   }
 }

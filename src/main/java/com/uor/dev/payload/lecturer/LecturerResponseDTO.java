@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LecturerResponseDTO {
+
   private Integer lecturerId;
   private String firstName;
   private String lastName;
@@ -26,5 +27,15 @@ public class LecturerResponseDTO {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
+  }
+
+  @Builder(builderMethodName = "basicBuilder")
+  public LecturerResponseDTO(Integer lecturerId, String firstName, String lastName, String email,
+                             String phoneNumber) {
+    this.lecturerId = lecturerId;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
   }
 }

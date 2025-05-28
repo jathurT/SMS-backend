@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SessionResponseDTO {
+
   private Integer sessionId;
   private String date;
   private String startTime;
@@ -33,6 +34,16 @@ public class SessionResponseDTO {
     this.endTime = endTime;
     this.courseName = courseName;
     this.courseCode = courseCode;
+    this.lecturerName = lecturerName;
+  }
+
+  @Builder(builderMethodName = "partialBuilder")
+  public SessionResponseDTO(Integer sessionId, String date, String startTime, String endTime,
+                            String lecturerName) {
+    this.sessionId = sessionId;
+    this.date = date;
+    this.startTime = startTime;
+    this.endTime = endTime;
     this.lecturerName = lecturerName;
   }
 }
