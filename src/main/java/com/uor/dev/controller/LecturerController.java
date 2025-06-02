@@ -4,6 +4,8 @@ import com.uor.dev.payload.lecturer.CreateLecturerRequestDTO;
 import com.uor.dev.payload.lecturer.LectureCourseResponseDTO;
 import com.uor.dev.payload.lecturer.LecturerResponseDTO;
 import com.uor.dev.payload.lecturer.UpdateLecturerRequestDTO;
+import com.uor.dev.security.RequireRole;
+import com.uor.dev.security.Roles;
 import com.uor.dev.service.LectureService;
 import com.uor.dev.util.ResponseEntity;
 import jakarta.inject.Inject;
@@ -11,6 +13,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
+import javax.management.relation.Role;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +27,7 @@ public class LecturerController {
 
   @GET
   @Path("/all")
+  @RequireRole({Roles.ADMIN, Roles.LECTURER})
   public ResponseEntity<List<LecturerResponseDTO>> getAllLecturers() {
     List<LecturerResponseDTO> lecturers = lectureService.getAllLecturers();
     return ResponseEntity.ok(lecturers);

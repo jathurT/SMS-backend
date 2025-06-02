@@ -67,6 +67,24 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Security & Authentication -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-oidc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-keycloak-authorization</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-security-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-jwt</artifactId>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>io.quarkus</groupId>
